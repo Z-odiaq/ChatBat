@@ -10,10 +10,10 @@ class Message extends PureComponent {
 
   render() {
     return (
-      <View>
-        <Text> {this.props.item.User} </Text>
-        <Text> {this.props.item.Message} </Text>
-        <Text> {this.props.item.CreatedAt} </Text>
+      <View style={{ backgroundColor:"#cdcdcd", padding:8}}>
+        <Text style={{ color:"#000", fontWeight:"bold"}}> {this.props.item.User} </Text>
+        <Text style={{ color:"#000",}}> {this.props.item.Message} </Text>
+        <Text style={{ color:"#000", }}> {this.props.item.CreatedAt} </Text>
       </View>
     );
   }

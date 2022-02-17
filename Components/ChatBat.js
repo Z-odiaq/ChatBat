@@ -9,47 +9,39 @@ export default class ChatBat extends Component {
         super(props);
         this.state = {
             messageToSend: {},
-            messages: [{
-                key: 45645646,
-                User: "Mohamed",
-                Message: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
-                Type: 0,
-                Status: 2,
-                CreatedAt: "20-20-2022:10:50:12"
-            },
-            {
-                key: 456545646,
-                User: "Mohamed",
-                Message: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
-                Type: 0,
-                Status: 2,
-                CreatedAt: "20-20-2022:10:50:12"
-            },
-            {
-                key: 456745646,
-                User: "Mohamed",
-                Message: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
-                Type: 0,
-                Status: 2,
-                CreatedAt: "20-20-2022:10:50:12"
-            }]
+            messages: []
         };
+        for (var i = 0; i < 100; i++) {
+            this.state.messages.push({
+                key: Math.floor(Math.random() * 100000000) + 1,
+                User: "Mohamed",
+                Message: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
+                Type: 0,
+                Status: 2,
+                CreatedAt: "20-20-2022:10:50:12"
+            })
+        }
     }
 
     componentDidMount() {
-        var temp = [];
-
         console.log("temp generated " + this.state.messages.length + " objects.");
     }
 
 
     onSend = (msg) => {
-        console.log(msg);
+        this.state.messages.push({
+            key: Math.floor(Math.random() * 100000000) + 1,
+            User: "Mohamed",
+            Message: msg,
+            Type: 0,
+            Status: 2,
+            CreatedAt: "20-20-2022:10:50:12"
+        })
     };
 
 
-    renderItem = (item) => { return <Text style={{color:"#fff", fontSize:24}}>{item.Message}</Text> }
 
+    renderItem = (item) => { return <View style={{padding:4}}><Message item={item} ></Message></View>}
 
 
 
@@ -60,12 +52,10 @@ export default class ChatBat extends Component {
 
                 <FlatList
                     data={this.state.messages}
-                    renderItem={({ item }) => <Text>{item.message}</Text>}
-
+                    renderItem={({ item }) => this.renderItem(item)}
                     keyExtractor={item => item.key}
                 />
-
-<Button title='eeeeeeee'></Button>
+                <Input onSend={msg=>this.onSend(msg)}></Input>
             </View>
 
         );
