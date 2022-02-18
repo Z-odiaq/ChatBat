@@ -1,63 +1,261 @@
-import React, { Component } from 'react';
-import { View, Text, FlatList, SafeAreaView, Button } from 'react-native';
-import Input from "./Input";
-import Message from './Message';
-import Renderer from "./Renderer";
+import React, { Component, createRef } from 'react';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    Image,
+    Alert,
+    ScrollView,
+    TextInput,
+    FlatList,
+    Button,
+    Dimensions,
+    KeyboardAvoidingView
+} from 'react-native';
 
+const { width, height } = Dimensions.get('window');
 export default class ChatBat extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            messageToSend: {},
-            messages: []
+            msg: '',
+            messages: [],
+
         };
+
+
         for (var i = 0; i < 100; i++) {
             this.state.messages.push({
-                key: Math.floor(Math.random() * 100000000) + 1,
-                User: "Mohamed",
-                Message: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
+                id: Math.floor(Math.random() * 100000000) + 1,
+                User: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
+                msg: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
                 Type: 0,
                 Status: 2,
                 CreatedAt: "20-20-2022:10:50:12"
             })
         }
+
+
+
+        this.scrollToBottom = (animated = true) => {
+            const { inverted } = this.props;
+            if (inverted) {
+                this.scrollTo({ offset: 0, animated });
+            }
+            else if (this.props.forwardRef && this.props.forwardRef.current) {
+                this.props.forwardRef.current.scrollToEnd({ animated });
+            }
+        };
+
     }
 
-    componentDidMount() {
-        console.log("temp generated " + this.state.messages.length + " objects.");
+
+
+
+
+    send() {
+        if (this.state.msg.length > 0) {
+            console.log("scrolling"+this.props.messages[0].msg);
+
+            var messages = this.state.messages;
+            messages.push({
+                id: Math.floor((Math.random() * 99999999999999999) + 1),
+                sent: true,
+                msg: this.state.msg,
+                image: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'
+            });
+            this.setState({ messages: messages });
+            setTimeout(() => {
+                this.reply();
+            }, 2000);
+            this.setState({ msg: "" });
+
+        }
     }
 
+    renderAvatar() {
+        return (<Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />);
+    }
 
-    onSend = (msg) => {
-        this.state.messages.push({
-            key: Math.floor(Math.random() * 100000000) + 1,
-            User: "Mohamed",
-            Message: msg,
-            Type: 0,
-            Status: 2,
-            CreatedAt: "20-20-2022:10:50:12"
-        })
+    _renderItem = ({ item }) => {
+
+
+
+        if (item.User === "Ahmed") {
+            return (
+                <View style={styles.eachMsg}>
+                    {/* <Image source={{ uri: item.image}} style={styles.userPic} /> */}
+                    <View style={styles.msgBlock}>
+                        <Text style={styles.msgTxt}>{item.msg}</Text>
+                    </View>
+                </View>
+            );
+        } else {
+            return (
+                <View style={styles.rightMsg} >
+                    <View style={styles.rightBlock} >
+                        <Text style={styles.rightTxt}>{item.msg}</Text>
+                    </View>
+
+                </View>
+            );
+        }
     };
-
-
-
-    renderItem = (item) => { return <View style={{padding:4}}><Message item={item} ></Message></View>}
-
-
 
     render() {
         return (
+            <View style={{ flex: 1 }}>
 
-            <View >
+                <KeyboardAvoidingView behavior="height" style={styles.keyboard}>
+                    <FlatList
+                        style={styles.list}
+                        ref={this.props.forwardRef}
+                        extraData={[this.props.extraData]} 
+                        extraData={this.state}
+                        data={this.props.messages} 
+                        inverted={false}
+                        onEndReached={this.onEndReached} 
 
-                <FlatList
-                    data={this.state.messages}
-                    renderItem={({ item }) => this.renderItem(item)}
-                    keyExtractor={item => item.key}
-                />
-                <Input onSend={msg=>this.onSend(msg)}></Input>
+                        onEndReachedThreshold={0.1} 
+                        onEndReached={this.onEndReached} 
+                        ListEmptyComponent={this.renderChatEmpty} 
+                        scrollEventThrottle={100}
+                        flatListRef={React.createRef()}
+                        keyExtractor={(item) => {
+                            return item.id;
+                        }}
+                        renderItem={this.renderItem} />
+                    <View style={{ flexDirection: "row", marginBottom: 20 }}>
+                        <TextInput
+                            style={{ flex: 1, backgroundColor: "#fff", color: "#000" }}
+                            value={this.state.msg}
+                            placeholderTextColor="#696969"
+                            onChangeText={msg => this.setState({ msg })}
+                            blurOnSubmit={false}
+                            onSubmitEditing={() => this.send()}
+                            placeholder="Type a message"
+                            returnKeyType="send" />
+
+
+                        <Button title='Send' onPress={() => this.send()}></Button>
+                    </View>
+                </KeyboardAvoidingView>
             </View>
-
         );
     }
 }
+
+const styles = StyleSheet.create({
+    keyboard: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    image: {
+        width,
+        height,
+    },
+    avatarStyle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+    },
+    header: {
+        height: 65,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#075e54',
+    },
+    left: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    right: {
+        flexDirection: 'row',
+    },
+    chatTitle: {
+        color: '#fff',
+        fontWeight: '600',
+        margin: 10,
+        fontSize: 15,
+    },
+    chatImage: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        margin: 5,
+    },
+    input: {
+        flexDirection: 'row',
+        alignSelf: 'flex-end',
+        padding: 10,
+        height: 40,
+        width: width - 20,
+        backgroundColor: '#3d3d3d',
+        margin: 10,
+        shadowColor: '#3d3d3d',
+        shadowRadius: 2,
+        shadowOpacity: 0.5,
+        shadowOffset: {
+            height: 1,
+        },
+        borderColor: '#696969',
+        borderWidth: 1,
+    },
+    eachMsg: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        margin: 5,
+    },
+    rightMsg: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        margin: 5,
+        alignSelf: 'flex-end',
+    },
+    userPic: {
+        height: 40,
+        width: 40,
+        margin: 5,
+        borderRadius: 20,
+        backgroundColor: '#f8f8f8',
+    },
+    msgBlock: {
+        width: 220,
+        borderRadius: 5,
+        backgroundColor: '#ffffff',
+        padding: 10,
+        shadowColor: '#3d3d3d',
+        shadowRadius: 2,
+        shadowOpacity: 0.5,
+        shadowOffset: {
+            height: 1,
+        },
+    },
+    rightBlock: {
+        width: 220,
+        borderRadius: 5,
+        backgroundColor: '#97c163',
+        padding: 10,
+        shadowColor: '#3d3d3d',
+        shadowRadius: 2,
+        shadowOpacity: 0.5,
+        shadowOffset: {
+            height: 1,
+        },
+    },
+    msgTxt: {
+        fontSize: 15,
+        color: '#555',
+        fontWeight: '600',
+    },
+    rightTxt: {
+        fontSize: 15,
+        color: '#202020',
+        fontWeight: '600',
+    },
+}); 

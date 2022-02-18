@@ -1,63 +1,175 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
+import React, { Component, createRef } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
+  TouchableOpacity,
+  Image,
+  Alert,
+  ScrollView,
+  TextInput,
+  FlatList,
+  Button,
+  Dimensions,
+  KeyboardAvoidingView
 } from 'react-native';
+import ChatBat from './Components/ChatBat';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const { width, height } = Dimensions.get('window');
+export default class Chat extends Component {
 
-import ChatBat from "./Components/ChatBat"
+  constructor(props) {
+    super(props);
+    this.state = {
+      msg: '',
+      messages: [],
 
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
+    };
 
 
-  return (
-    <View>
-      <ChatBat>
+    for (var i = 0; i < 100; i++) {
+      this.state.messages.push({
+        id: Math.floor(Math.random() * 100000000) + 1,
+        User: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
+        msg: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
+        Type: 0,
+        Status: 2,
+        CreatedAt: "20-20-2022:10:50:12"
+      })
+    }
 
-      </ChatBat>
-    </View>
-  );
-};
+
+
+    this.scrollToBottom = (animated = true) => {
+      const { inverted } = this.props;
+      if (inverted) {
+        this.scrollTo({ offset: 0, animated });
+      }
+      else if (this.props.forwardRef && this.props.forwardRef.current) {
+        this.props.forwardRef.current.scrollToEnd({ animated });
+      }
+    };
+
+  }
+
+
+
+
+  render() {
+    return (
+      <View style={{ flex: 1 }}>
+
+        <KeyboardAvoidingView behavior="height" style={styles.keyboard}>
+         <ChatBat  messages={this.state.messages}></ChatBat>
+
+        </KeyboardAvoidingView>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  keyboard: {
+    flex: 1,
+    justifyContent: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
+  image: {
+    width,
+    height,
+  },
+  header: {
+    height: 65,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#075e54',
+  },
+  left: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  right: {
+    flexDirection: 'row',
+  },
+  chatTitle: {
+    color: '#fff',
+    fontWeight: '600',
+    margin: 10,
+    fontSize: 15,
+  },
+  chatImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    margin: 5,
+  },
+  input: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    padding: 10,
+    height: 40,
+    width: width - 20,
+    backgroundColor: '#3d3d3d',
+    margin: 10,
+    shadowColor: '#3d3d3d',
+    shadowRadius: 2,
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      height: 1,
+    },
+    borderColor: '#696969',
+    borderWidth: 1,
+  },
+  eachMsg: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    margin: 5,
+  },
+  rightMsg: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    margin: 5,
+    alignSelf: 'flex-end',
+  },
+  userPic: {
+    height: 40,
+    width: 40,
+    margin: 5,
+    borderRadius: 20,
+    backgroundColor: '#f8f8f8',
+  },
+  msgBlock: {
+    width: 220,
+    borderRadius: 5,
+    backgroundColor: '#ffffff',
+    padding: 10,
+    shadowColor: '#3d3d3d',
+    shadowRadius: 2,
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      height: 1,
+    },
+  },
+  rightBlock: {
+    width: 220,
+    borderRadius: 5,
+    backgroundColor: '#97c163',
+    padding: 10,
+    shadowColor: '#3d3d3d',
+    shadowRadius: 2,
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      height: 1,
+    },
+  },
+  msgTxt: {
+    fontSize: 15,
+    color: '#555',
     fontWeight: '600',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  rightTxt: {
+    fontSize: 15,
+    color: '#202020',
+    fontWeight: '600',
   },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+}); 
