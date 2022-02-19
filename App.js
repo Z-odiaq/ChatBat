@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -20,48 +20,48 @@ export default class Chat extends Component {
 
   constructor(props) {
     super(props);
+    this.chatBatRef = React.createRef();
     this.state = {
       msg: '',
       messages: [],
 
     };
 
-
     for (var i = 0; i < 100; i++) {
       this.state.messages.push({
         id: Math.floor(Math.random() * 100000000) + 1,
         User: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
         msg: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
-        Type: 0,
+        Type: 1,
         Status: 2,
         CreatedAt: "20-20-2022:10:50:12"
       })
     }
 
+  }
 
-
-    this.scrollToBottom = (animated = true) => {
-      const { inverted } = this.props;
-      if (inverted) {
-        this.scrollTo({ offset: 0, animated });
-      }
-      else if (this.props.forwardRef && this.props.forwardRef.current) {
-        this.props.forwardRef.current.scrollToEnd({ animated });
-      }
-    };
-
+  componentDidUpdate(prevProps = {}) {
+    //setTimeout(() => this.scrollToBottom(false), 200);
   }
 
 
+  send = (msg) => {
+    console.log(msg.msg);
+    var messages = this.state.messages;
+    messages.push(msg);
+    this.setState({ messages: messages });
 
+  }
 
   render() {
     return (
       <View style={{ flex: 1 }}>
-
         <KeyboardAvoidingView behavior="height" style={styles.keyboard}>
-         <ChatBat  messages={this.state.messages}></ChatBat>
-
+          <ChatBat
+            messages={this.state.messages}
+            OnSend={(msg) => this.send(msg)}
+            Ref={this.chatBatRef}
+          />
         </KeyboardAvoidingView>
       </View>
     );

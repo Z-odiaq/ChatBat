@@ -13,16 +13,19 @@ import {
     Dimensions,
     KeyboardAvoidingView
 } from 'react-native';
+import ChatBubble from './ChatBubble';
 
 const { width, height } = Dimensions.get('window');
 export default class ChatBat extends Component {
 
     constructor(props) {
         super(props);
+        this.chatBatRef = createRef();
+
         this.state = {
             msg: '',
             messages: [],
-
+            msgsLength: this.props.messages.length,
         };
 
 
@@ -38,70 +41,28 @@ export default class ChatBat extends Component {
         }
 
 
-
-        this.scrollToBottom = (animated = true) => {
-            const { inverted } = this.props;
-            if (inverted) {
-                this.scrollTo({ offset: 0, animated });
-            }
-            else if (this.props.forwardRef && this.props.forwardRef.current) {
-                this.props.forwardRef.current.scrollToEnd({ animated });
-            }
-        };
-
     }
-
-
-
 
 
     send() {
         if (this.state.msg.length > 0) {
-            console.log("scrolling"+this.props.messages[0].msg);
 
-            var messages = this.state.messages;
-            messages.push({
+            var msg = {
                 id: Math.floor((Math.random() * 99999999999999999) + 1),
                 sent: true,
                 msg: this.state.msg,
                 image: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'
-            });
-            this.setState({ messages: messages });
-            setTimeout(() => {
-                this.reply();
-            }, 2000);
+            }
             this.setState({ msg: "" });
+            this.flatListRef.scrollToIndex({ animated: true, index: this.state.msgsLength - 1 });
+            return (this.props.OnSend(msg))
 
         }
     }
 
-    renderAvatar() {
-        return (<Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />);
-    }
 
-    _renderItem = ({ item }) => {
-
-
-
-        if (item.User === "Ahmed") {
-            return (
-                <View style={styles.eachMsg}>
-                    {/* <Image source={{ uri: item.image}} style={styles.userPic} /> */}
-                    <View style={styles.msgBlock}>
-                        <Text style={styles.msgTxt}>{item.msg}</Text>
-                    </View>
-                </View>
-            );
-        } else {
-            return (
-                <View style={styles.rightMsg} >
-                    <View style={styles.rightBlock} >
-                        <Text style={styles.rightTxt}>{item.msg}</Text>
-                    </View>
-
-                </View>
-            );
-        }
+    renderItem = ({ item }) => {
+        return (<ChatBubble userId="Ahmed" msg={item} />)
     };
 
     render() {
@@ -112,17 +73,16 @@ export default class ChatBat extends Component {
                     <FlatList
                         style={styles.list}
                         ref={this.props.forwardRef}
-                        extraData={[this.props.extraData]} 
+                        extraData={[this.props.extraData]}
                         extraData={this.state}
-                        data={this.props.messages} 
+                        data={this.props.messages}
                         inverted={false}
-                        onEndReached={this.onEndReached} 
-
-                        onEndReachedThreshold={0.1} 
-                        onEndReached={this.onEndReached} 
-                        ListEmptyComponent={this.renderChatEmpty} 
+                        onEndReached={this.onEndReached}
+                        ref={(ref) => { this.flatListRef = ref; }}
+                        onEndReachedThreshold={0.1}
+                        onEndReached={this.onEndReached}
+                        ListEmptyComponent={this.renderChatEmpty}
                         scrollEventThrottle={100}
-                        flatListRef={React.createRef()}
                         keyExtractor={(item) => {
                             return item.id;
                         }}
