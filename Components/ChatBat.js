@@ -24,45 +24,50 @@ export default class ChatBat extends Component {
 
         this.state = {
             msg: '',
-            messages: [],
-            msgsLength: this.props.messages.length,
         };
 
 
-        for (var i = 0; i < 100; i++) {
-            this.state.messages.push({
-                id: Math.floor(Math.random() * 100000000) + 1,
-                User: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
-                msg: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
-                Type: 0,
-                Status: 2,
-                CreatedAt: "20-20-2022:10:50:12"
-            })
-        }
+
 
 
     }
 
 
     send() {
+
         if (this.state.msg.length > 0) {
 
+            var messages = this.props.messages;
             var msg = {
-                id: Math.floor((Math.random() * 99999999999999999) + 1),
-                sent: true,
+                id: Math.floor(Math.random() * 100000000) + 1,
+                user: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
                 msg: this.state.msg,
+                type: 1,
+                status: 2,
+                createdAt: "20-20-2022:10:50:12",
                 image: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'
             }
-            this.setState({ msg: "" });
-            this.flatListRef.scrollToIndex({ animated: true, index: this.state.msgsLength - 1 });
+            messages.push(msg);
+            this.setState({ messages: messages, msg: "" });
+            console.log(messages.length + " " + (this.props.messages.length) - 1);
+
+            this.flatListRef.scrollToIndex({ animated: true, index: messages.length - 2 });
+
             return (this.props.OnSend(msg))
 
         }
+
+
     }
 
 
-    renderItem = ({ item }) => {
-        return (<ChatBubble userId="Ahmed" msg={item} />)
+    renderItem = ( item , index) => {
+        console.log(index+1+" "+this.props.messages.length);
+        return (<ChatBubble 
+            userId="Ahmed" 
+            item={item} 
+            nextItem={index+1 < this.props.messages.length && this.props.messages[index+1]}
+            prevItem={index !=0 && this.props.messages[index-1]} />)
     };
 
     render() {
@@ -71,9 +76,8 @@ export default class ChatBat extends Component {
 
                 <KeyboardAvoidingView behavior="height" style={styles.keyboard}>
                     <FlatList
-                        style={styles.list}
+                        style={{ backgroundColor: "#EFE5F6" }}
                         ref={this.props.forwardRef}
-                        extraData={[this.props.extraData]}
                         extraData={this.state}
                         data={this.props.messages}
                         inverted={false}
@@ -86,7 +90,7 @@ export default class ChatBat extends Component {
                         keyExtractor={(item) => {
                             return item.id;
                         }}
-                        renderItem={this.renderItem} />
+                        renderItem={({item, index}) => this.renderItem(item, index)} />
                     <View style={{ flexDirection: "row", marginBottom: 20 }}>
                         <TextInput
                             style={{ flex: 1, backgroundColor: "#fff", color: "#000" }}
@@ -149,23 +153,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         margin: 5,
     },
-    input: {
-        flexDirection: 'row',
-        alignSelf: 'flex-end',
-        padding: 10,
-        height: 40,
-        width: width - 20,
-        backgroundColor: '#3d3d3d',
-        margin: 10,
-        shadowColor: '#3d3d3d',
-        shadowRadius: 2,
-        shadowOpacity: 0.5,
-        shadowOffset: {
-            height: 1,
-        },
-        borderColor: '#696969',
-        borderWidth: 1,
-    },
+
     eachMsg: {
         flexDirection: 'row',
         alignItems: 'flex-end',
@@ -189,7 +177,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#ffffff',
         padding: 10,
-        shadowColor: '#3d3d3d',
         shadowRadius: 2,
         shadowOpacity: 0.5,
         shadowOffset: {
@@ -201,7 +188,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#97c163',
         padding: 10,
-        shadowColor: '#3d3d3d',
         shadowRadius: 2,
         shadowOpacity: 0.5,
         shadowOffset: {
