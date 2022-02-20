@@ -8,12 +8,12 @@
     "start": "react-native start",
     "test": "jest",
     "runand": "adb connect 127.0.0.1:58526 && react-native run-android",
-
     "lint": "eslint ."
   },
   "dependencies": {
     "react": "17.0.2",
-    "react-native": "0.67.2"
+    "react-native": "0.67.2",
+    "react-native-fast-image": "^8.5.11"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
