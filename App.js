@@ -27,16 +27,19 @@ export default class Chat extends Component {
 
     };
 
+
     for (var i = 0; i < 100; i++) {
       this.state.messages.push({
         id: Math.floor(Math.random() * 100000000) + 1,
-        User: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
-        msg: "hhhhhhhhhhhhhhhhhhhhhsdfqsdf",
-        Type: 1,
-        Status: 2,
-        CreatedAt: "20-20-2022:10:50:12"
+        user: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
+        msg: "hhh hhhhhhhhhh hhhhhhhh feqfzfs zefzr fsfaerg dgqergq ezgqrg sdfqsdf",
+        type:  Math.random() < 0.1 ? 0 : 1,
+        status: 2,
+        createdAt: "20-20-2022:10:50:12"
       })
     }
+
+
 
   }
 
@@ -46,10 +49,9 @@ export default class Chat extends Component {
 
 
   send = (msg) => {
-    console.log(msg.msg);
-    var messages = this.state.messages;
-    messages.push(msg);
-    this.setState({ messages: messages });
+
+    console.log(msg.length);
+
 
   }
 
@@ -60,8 +62,8 @@ export default class Chat extends Component {
           <ChatBat
             messages={this.state.messages}
             OnSend={(msg) => this.send(msg)}
-            Ref={this.chatBatRef}
           />
+
         </KeyboardAvoidingView>
       </View>
     );
