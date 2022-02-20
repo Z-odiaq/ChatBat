@@ -33,7 +33,8 @@ export default class Chat extends Component {
         id: Math.floor(Math.random() * 100000000) + 1,
         user: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
         msg: "hhh hhhhhhhhhh hhhhhhhh feqfzfs zefzr fsfaerg dgqergq ezgqrg sdfqsdf",
-        type:  Math.random() < 0.1 ? 0 : 1,
+        type: Math.random() < 0.2 ? Math.random() < 0.1? 0: 2 : 1 ,
+        link: "https://picsum.photos/200/300?random="+Math.floor(Math.random() * 10),
         status: 2,
         createdAt: "20-20-2022:10:50:12"
       })
@@ -61,6 +62,8 @@ export default class Chat extends Component {
         <KeyboardAvoidingView behavior="height" style={styles.keyboard}>
           <ChatBat
             messages={this.state.messages}
+            friendAvatar={"https://www.bootdey.com/img/Content/avatar/avatar1.png"}
+            user={"Ahmed"}
             OnSend={(msg) => this.send(msg)}
           />
 
