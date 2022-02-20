@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import {
     StyleSheet,
     Text,
@@ -14,41 +14,58 @@ import {
     KeyboardAvoidingView
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
+import FastImage from 'react-native-fast-image'
 
-export default class ChatBubble extends Component {
+export default class ChatBubble extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+
         };
+
     }
 
     renderAvatar() {
-        return (<Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />);
+        return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
     }
 
-
+    ShowImage() {
+        return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
+    }
     renderByType = () => {
         const pos = this.props.item.user === this.props.userId;
+
         const sameN = this.props.item.user === this.props.nextItem.user;
         const sameP = this.props.item.user === this.props.prevItem.user;
-
         if (this.props.item.type === 1) {//type = text
             return (
-                <View style={pos ? 
-                (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) : 
-                (sameN ? sameP ? styles.leftBlockMid : styles.leftBlockUp : sameP ? styles.leftBlockDown : styles.leftBlockOnly)}>
-                    <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}</Text>
-                </View>
-
-            )
-        } else if (this.props.item.type === 2) { //type = image
-            return (<View>
-                <View style={pos ? styles.rightMsg : styles.eachMsg}>
-                    <View style={pos ? styles.rightBlock : styles.msgBlock}>
+                <View style={pos ? null : { flexDirection: "row", alignItems: 'flex-end' }}>
+                    {!sameN && !pos && this.renderAvatar()}
+                    <View style={pos ?
+                        (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) :
+                        (sameN ? sameP ? styles.leftBlockMid : styles.leftBlockUp : sameP ? styles.leftBlockDown : styles.leftBlockOnly)}>
                         <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}</Text>
                     </View>
                 </View>
-            </View>)
+            )
+        } else if (this.props.item.type === 2) { //type = image
+            return (
+                <View style={pos ? null : { flexDirection: "row", alignItems: 'flex-end' }}>
+                    {!sameN && !pos && this.renderAvatar()}
+                    <View style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly,sameN? {marginLeft:45} : null])}>
+                        <FastImage
+                            style={{ width: 200, height: 200, borderRadius:5 }}
+                            source={{
+                                uri: this.props.item.link,
+                                priority: FastImage.priority.normal,
+                            }}
+                            resizeMode={FastImage.resizeMode.str}
+                        />
+                    </View>
+
+
+                </View>
+            )
         } else if (this.props.item.type === 3) { //type == video
             return (<View>
                 <View style={pos ? styles.rightMsg : styles.eachMsg}>
@@ -82,13 +99,53 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
     },
-    image: {
-        width,
-        height,
+    ImageRightBlock: {
+        borderBottomRightRadius: 0,
+        borderTopRightRadius: 15,
+        borderTopLeftRadius: 15,
+        borderBottomLeftRadius: 15,
+        
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        marginTop: 5,
+        marginRight: 5,
+        marginBottom: 5,
+        alignSelf: 'flex-end',
+
+        backgroundColor: '#9C4AD5',
+        padding: 10,
+        shadowRadius: 2,
+        shadowOpacity: 0.5,
+        shadowOffset: {
+            height: 1,
+        },
+    },
+    ImageLeftBlock: {
+        
+        borderBottomLeftRadius: 0,
+        borderTopLefttRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomRightRadius: 20,
+
+        marginTop: 5,
+        marginRight: 5,
+        marginBottom: 5,
+        marginLeft: 45,
+
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+      
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        padding: 10,
+        shadowRadius: 2,
+        shadowOpacity: 0.5,
+        shadowOffset: {
+            height: 1,
+        },
     },
     avatarStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
+        marginBottom: 10,
         width: 40,
         height: 40,
         borderRadius: 20,
@@ -172,7 +229,7 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 5,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 5,
+        borderBottomLeftRadius: 20,
 
         flexDirection: 'row',
         alignItems: 'flex-end',
@@ -180,7 +237,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         marginBottom: 5,
         alignSelf: 'flex-end',
-        maxWidth: "60%",
+        maxWidth: "70%",
         backgroundColor: '#9C4AD5',
         padding: 10,
         shadowRadius: 2,
@@ -191,12 +248,15 @@ const styles = StyleSheet.create({
     },
     rightBlockMid: {
 
-        borderRadius: 5,
+        borderBottomRightRadius: 5,
+        borderTopRightRadius: 5,
+        borderTopLeftRadius: 20,
+        borderBottomLeftRadius: 20,
 
         flexDirection: 'row',
         alignItems: 'flex-end',
         alignSelf: 'flex-end',
-        maxWidth: "60%",
+        maxWidth: "70%",
         marginRight: 5,
         marginBottom: 5,
         backgroundColor: '#9C4AD5',
@@ -211,7 +271,7 @@ const styles = StyleSheet.create({
 
         borderBottomRightRadius: 0,
         borderTopRightRadius: 5,
-        borderTopLeftRadius: 5,
+        borderTopLeftRadius: 20,
         borderBottomLeftRadius: 20,
 
         flexDirection: 'row',
@@ -219,7 +279,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         marginBottom: 5,
         alignSelf: 'flex-end',
-        maxWidth: "60%",
+        maxWidth: "70%",
         backgroundColor: '#9C4AD5',
         padding: 10,
         shadowRadius: 2,
@@ -238,10 +298,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginRight: 5,
-        marginBottom:5,
-        marginTop:5,
+        marginBottom: 5,
+        marginTop: 5,
         alignSelf: 'flex-end',
-        maxWidth: "60%",
+        maxWidth: "70%",
         backgroundColor: '#9C4AD5',
         padding: 10,
         shadowRadius: 2,
@@ -255,17 +315,16 @@ const styles = StyleSheet.create({
     leftBlockUp: {
 
         borderBottomLeftRadius: 5,
-        borderTopLefttRadius: 20,
+        borderTopLefttRadius: 5,
         borderTopRightRadius: 20,
-        borderBottomRightRadius: 5,
+        borderBottomRightRadius: 20,
 
         flexDirection: 'row',
         alignItems: 'flex-end',
-        marginLeft: 5,
+        marginLeft: 45,
         marginTop: 5,
         marginBottom: 5,
         maxWidth: "60%",
-        borderRadius: 5,
         backgroundColor: '#fff',
         padding: 10,
         shadowRadius: 2,
@@ -276,9 +335,13 @@ const styles = StyleSheet.create({
     },
     leftBlockMid: {
 
-        borderRadius: 5,
+        borderBottomLeftRadius: 5,
+        borderTopLefttRadius: 5,
+        borderTopRightRadius: 20,
+        borderBottomRightRadius: 20,
+
         marginBottom: 5,
-        marginLeft: 5,
+        marginLeft: 45,
 
         flexDirection: 'row',
         alignItems: 'flex-end',
@@ -295,7 +358,7 @@ const styles = StyleSheet.create({
     leftBlockDown: {
 
         borderBottomRightRadius: 20,
-        borderTopRightRadius: 5,
+        borderTopRightRadius: 20,
         borderTopLeftRadius: 5,
         borderBottomLeftRadius: 0,
 
@@ -324,8 +387,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginLeft: 5,
-        marginBottom:5,
-        marginTop:5,
+        marginBottom: 5,
+        marginTop: 5,
         maxWidth: "60%",
         borderRadius: 5,
         backgroundColor: '#fff',
