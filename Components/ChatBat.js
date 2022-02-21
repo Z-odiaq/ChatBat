@@ -24,12 +24,8 @@ export default class ChatBat extends Component {
 
         this.state = {
             msg: '',
+            inverted: true,
         };
-
-
-
-
-
     }
 
 
@@ -47,11 +43,12 @@ export default class ChatBat extends Component {
                 createdAt: "20-20-2022:10:50:12",
                 image: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'
             }
-            messages.push(msg);
-            this.setState({ messages: messages, msg: "" });
+            this.setState({ messages: [msg, ...this.props.messages], msg: "" });
+
+            //this.setState({ messages: messages, msg: "" });
             console.log(messages.length + " " + (this.props.messages.length) - 1);
 
-            this.flatListRef.scrollToIndex({ animated: true, index: messages.length - 2 });
+            //this.flatListRef.scrollToIndex({ animated: true, index: messages.length - 2 });
 
             return (this.props.OnSend(msg))
 
@@ -61,13 +58,29 @@ export default class ChatBat extends Component {
     }
 
 
-    renderItem = ( item , index) => {
-        console.log(index+1+" "+this.props.messages.length);
-        return (<ChatBubble 
-            userId="Ahmed" 
-            item={item} 
-            nextItem={index+1 < this.props.messages.length && this.props.messages[index+1]}
-            prevItem={index !=0 && this.props.messages[index-1]} />)
+    scrollDown = () => {
+        console.log(index + 1 + " " + this.props.messages.length);
+        return (<ChatBubble
+            userId="Ahmed"
+            item={item}
+            nextItem={index + 1 < this.props.messages.length && this.props.messages[index + 1]}
+            prevItem={index != 0 && this.props.messages[index - 1]}
+            friendAvatar={this.props.friendAvatar}
+            imageView={(url) => { console.log("handle it yourself p*ssy. " + url) }}
+        />)
+    };
+
+
+    renderItem = (item, index) => {
+        console.log(index + 1 + " " + this.props.messages.length);
+        return (<ChatBubble
+            userId="Ahmed"
+            item={item}
+            nextItem={index + 1 < this.props.messages.length && this.props.messages[index + 1]}
+            prevItem={index != 0 && this.props.messages[index - 1]}
+            friendAvatar={this.props.friendAvatar}
+            imageView={(url) => { console.log("handle it yourself p*ssy. " + url) }}
+        />)
     };
 
     render() {
@@ -76,10 +89,10 @@ export default class ChatBat extends Component {
 
                 <KeyboardAvoidingView behavior="height" style={styles.keyboard}>
                     <FlatList
-                        style={{ backgroundColor: "#EFE5F6" }}
+                        style={{ backgroundColor: "#EFE5F6" , scaleY: -1  }}
                         ref={this.props.forwardRef}
                         extraData={this.state}
-                        data={this.props.messages}
+                        data={this.props.messages.reverse()}
                         inverted={false}
                         onEndReached={this.onEndReached}
                         ref={(ref) => { this.flatListRef = ref; }}
@@ -90,7 +103,8 @@ export default class ChatBat extends Component {
                         keyExtractor={(item) => {
                             return item.id;
                         }}
-                        renderItem={({item, index}) => this.renderItem(item, index)} />
+                        renderItem={({ item, index }) => this.renderItem(item, index)} />
+                        
                     <View style={{ flexDirection: "row", marginBottom: 20 }}>
                         <TextInput
                             style={{ flex: 1, backgroundColor: "#fff", color: "#000" }}
