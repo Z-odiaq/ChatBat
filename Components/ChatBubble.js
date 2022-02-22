@@ -36,7 +36,7 @@ export default class ChatBubble extends PureComponent {
         const sameP = this.props.item.user === this.props.prevItem.user;
         if (this.props.item.type === 1) {//type = text
             return (
-                <View style={pos ? { scaleY: -1 } : [{ flexDirection: "row", alignItems: 'flex-end' }, { scaleY: -1 }]}>
+                <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                     {!sameN && !pos && this.renderAvatar()}
                     <View style={pos ?
                         (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) :
@@ -47,7 +47,7 @@ export default class ChatBubble extends PureComponent {
             )
         } else if (this.props.item.type === 2) { //type = image
             return (
-                <View style={pos ? { scaleY: -1 } : [{ flexDirection: "row", alignItems: 'flex-end' }, { scaleY: -1 }]}>
+                <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                     {!sameN && !pos && this.renderAvatar()}
                     <TouchableOpacity onPress={() => { this.props.imageView(this.props.item.link) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 45 } : null])}>
                         <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
