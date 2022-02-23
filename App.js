@@ -28,7 +28,7 @@ export default class Chat extends Component {
     };
 
 
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 2; i++) {
       this.state.messages.push({
         id: Math.floor(Math.random() * 100000000) + 1,
         user: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
@@ -51,7 +51,7 @@ export default class Chat extends Component {
 
   send = (msg) => {
 
-    console.log(msg.length);
+    console.log(JSON.stringify (msg));
 
 
   }

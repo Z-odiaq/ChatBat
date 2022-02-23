@@ -92,14 +92,12 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 15,
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
-
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginTop: 5,
         marginRight: 5,
         marginBottom: 5,
         alignSelf: 'flex-end',
-
         backgroundColor: '#9C4AD5',
         padding: 10,
         shadowRadius: 2,
@@ -114,15 +112,12 @@ const styles = StyleSheet.create({
         borderTopLefttRadius: 20,
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
-
         marginTop: 5,
         marginRight: 5,
         marginBottom: 5,
-        marginLeft: 45,
-
+        marginLeft: 65,
         flexDirection: 'row',
         alignItems: 'flex-end',
-
         borderRadius: 5,
         backgroundColor: '#fff',
         padding: 10,
@@ -133,7 +128,7 @@ const styles = StyleSheet.create({
         },
     },
     avatarStyle: {
-        marginBottom: 10,
+        margin: 10,
         width: 40,
         height: 40,
         borderRadius: 20,
@@ -149,32 +144,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
 
     },
-    header: {
-        height: 65,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#075e54',
-    },
-    left: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    right: {
-        flexDirection: 'row',
-    },
-    chatTitle: {
-        color: '#fff',
-        fontWeight: '600',
-        margin: 10,
-        fontSize: 15,
-    },
-    chatImage: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        margin: 5,
-    },
     eachMsg: {
         flexDirection: 'row',
         alignItems: 'flex-end',
@@ -185,7 +154,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     msgBlock: {
-
         flexDirection: 'row',
         alignItems: 'flex-end',
         margin: 5,
@@ -205,20 +173,12 @@ const styles = StyleSheet.create({
         margin: 5,
         alignSelf: 'flex-end',
     },
-    userPic: {
-        height: 40,
-        width: 40,
-        margin: 5,
-        borderRadius: 20,
-        backgroundColor: '#f8f8f8',
-    },
     rightBlockUp: {
 
         borderBottomRightRadius: 5,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         borderBottomLeftRadius: 20,
-
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginTop: 5,
@@ -240,7 +200,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 5,
         borderTopLeftRadius: 20,
         borderBottomLeftRadius: 20,
-
         flexDirection: 'row',
         alignItems: 'flex-end',
         alignSelf: 'flex-end',
@@ -251,9 +210,7 @@ const styles = StyleSheet.create({
         padding: 10,
         shadowRadius: 2,
         shadowOpacity: 0.5,
-        shadowOffset: {
-            height: 1,
-        },
+        shadowOffset: {height: 1,},
     },
     rightBlockDown: {
 
@@ -261,7 +218,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 5,
         borderTopLeftRadius: 20,
         borderBottomLeftRadius: 20,
-
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginRight: 5,
@@ -282,7 +238,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 15,
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
-
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginRight: 5,
@@ -306,10 +261,9 @@ const styles = StyleSheet.create({
         borderTopLefttRadius: 5,
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
-
         flexDirection: 'row',
         alignItems: 'flex-end',
-        marginLeft: 45,
+        marginLeft: 65,
         marginTop: 5,
         marginBottom: 5,
         maxWidth: "60%",
@@ -322,15 +276,12 @@ const styles = StyleSheet.create({
         },
     },
     leftBlockMid: {
-
         borderBottomLeftRadius: 5,
         borderTopLefttRadius: 5,
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
-
         marginBottom: 5,
-        marginLeft: 45,
-
+        marginLeft: 65,
         flexDirection: 'row',
         alignItems: 'flex-end',
         maxWidth: "60%",
