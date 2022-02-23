@@ -14,6 +14,7 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 import ChatBubble from './ChatBubble';
+import Input from './Input';
 
 const { width, height } = Dimensions.get('window');
 export default class ChatBat extends Component {
@@ -29,15 +30,16 @@ export default class ChatBat extends Component {
   }
 
 
-  send() {
+  send(text) {
 
-    if (this.state.msg.length > 0) {
+    console.log(text);
+    if (text.length > 0) {
 
       var messages = this.props.messages;
       var msg = {
         id: Math.floor(Math.random() * 100000000) + 1,
         user: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
-        msg: this.state.msg,
+        msg: text,
         type: 1,
         status: 2,
         createdAt: "20-20-2022:10:50:12",
@@ -49,26 +51,12 @@ export default class ChatBat extends Component {
       console.log(messages.length + " " + (this.props.messages.length) - 1);
 
       //this.flatListRef.scrollToIndex({ animated: true, index: messages.length - 2 });
-
       return (this.props.OnSend(msg))
 
     }
-
-
   }
 
 
-  scrollDown = () => {
-    console.log(index + 1 + " " + this.props.messages.length);
-    return (<ChatBubble
-      userId="Ahmed"
-      item={item}
-      nextItem={index + 1 < this.props.messages.length && this.props.messages[index + 1]}
-      prevItem={index != 0 && this.props.messages[index - 1]}
-      friendAvatar={this.props.friendAvatar}
-      imageView={(url) => { console.log("handle it yourself p*ssy. " + url) }}
-    />)
-  };
 
 
   renderItem = (item, index) => {
@@ -89,7 +77,6 @@ export default class ChatBat extends Component {
     return (
       <View style={{ flex: 1 }}>
 
-        <KeyboardAvoidingView behavior="height" style={styles.keyboard}>
           <FlatList
             style={{ backgroundColor: "#EFE5F6", scaleY: -1 }}
             ref={this.props.forwardRef}
@@ -107,21 +94,7 @@ export default class ChatBat extends Component {
             }}
             renderItem={({ item, index }) => this.renderItem(item, index)} />
 
-          <View style={{ flexDirection: "row", marginBottom: 20 }}>
-            <TextInput
-              style={{ flex: 1, backgroundColor: "#fff", color: "#000" }}
-              value={this.state.msg}
-              placeholderTextColor="#696969"
-              onChangeText={msg => this.setState({ msg })}
-              blurOnSubmit={false}
-              onSubmitEditing={() => this.send()}
-              placeholder="Type a message"
-              returnKeyType="send" />
-
-
-            <Button title='Send' onPress={() => this.send()}></Button>
-          </View>
-        </KeyboardAvoidingView>
+          <Input onSend={(text) => this.send(text)}></Input>
       </View>
     );
   }
