@@ -28,14 +28,14 @@ export default class Chat extends Component {
     };
 
 
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < 20; i++) {
       this.state.messages.push({
         id: Math.floor(Math.random() * 100000000) + 1,
         user: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
-        msg: "hhh hhhhhhhhhh hhhhhhhh feqfzfs zefzr fsfaerg dgqergq ezgqrg sdfqsdf",
+        msg: "hhh hhhhhhhhhh hhhhhhhh feqfzfs zefzr fsfaerg dgqergq ezgqrg sdfqsdf sdfqsdf",
         type: Math.random() < 0.2 ? Math.random() < 0.1? 0: 2 : 1 ,
         link: "https://picsum.photos/200/300?random="+Math.floor(Math.random() * 10),
-        status: 2,
+        status: Math.random() < 0.3 ? Math.random() < 0.5? 0: 2 : 1 ,
         createdAt: "20-20-2022:10:50:12"
       })
     }
