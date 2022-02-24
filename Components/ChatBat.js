@@ -1,22 +1,8 @@
 import React, { Component, createRef } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Alert,
-  ScrollView,
-  TextInput,
-  FlatList,
-  Button,
-  Dimensions,
-  KeyboardAvoidingView
-} from 'react-native';
+import { StyleSheet, View, FlatList, } from 'react-native';
 import ChatBubble from './ChatBubble';
 import Input from './Input';
 
-const { width, height } = Dimensions.get('window');
 export default class ChatBat extends Component {
 
   constructor(props) {
@@ -31,10 +17,8 @@ export default class ChatBat extends Component {
 
 
   send(text) {
-
     console.log(text);
     if (text.length > 0) {
-
       var messages = this.props.messages;
       var msg = {
         id: Math.floor(Math.random() * 100000000) + 1,
@@ -46,21 +30,15 @@ export default class ChatBat extends Component {
         image: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'
       }
       messages.unshift(msg)
-      //this.setState({ messages: [msg, ...this.props.messages], msg: "" });
       this.setState({ messages: messages, msg: "" });
       console.log(messages.length + " " + (this.props.messages.length) - 1);
-
-      //this.flatListRef.scrollToIndex({ animated: true, index: messages.length - 2 });
       return (this.props.OnSend(msg))
 
     }
   }
 
-
-
-
   renderItem = (item, index) => {
-    console.log(index + 1 + " " + this.props.messages.length);
+    console.log(index + 1 + " " + JSON.stringify(item));
     return (<View style={{ scaleY: -1 }}>
       <ChatBubble
         userId="Ahmed"
@@ -76,25 +54,21 @@ export default class ChatBat extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-
-          <FlatList
-            style={{ backgroundColor: "#EFE5F6", scaleY: -1 }}
-            ref={this.props.forwardRef}
-            extraData={this.state}
-            data={this.props.messages}
-            inverted={false}
-            onEndReached={this.onEndReached}
-            ref={(ref) => { this.flatListRef = ref; }}
-            onEndReachedThreshold={0.1}
-            onEndReached={this.onEndReached}
-            ListEmptyComponent={this.renderChatEmpty}
-            scrollEventThrottle={50}
-            keyExtractor={(item) => {
-              return item.id;
-            }}
-            renderItem={({ item, index }) => this.renderItem(item, index)} />
-
-          <Input onSend={(text) => this.send(text)}></Input>
+        <FlatList
+          style={{ backgroundColor: "#EFE5F6", scaleY: -1 }}
+          ref={this.props.forwardRef}
+          extraData={this.state}
+          data={this.props.messages}
+          inverted={false}
+          onEndReached={this.onEndReached}
+          ref={(ref) => { this.flatListRef = ref; }}
+          onEndReachedThreshold={0.1}
+          onEndReached={this.onEndReached}
+          ListEmptyComponent={this.renderChatEmpty}
+          scrollEventThrottle={50}
+          keyExtractor={(item) => { return item.id }}
+          renderItem={({ item, index }) => this.renderItem(item, index)} />
+        <Input onSend={(text) => this.send(text)}></Input>
       </View>
     );
   }
@@ -105,10 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  image: {
-    width,
-    height,
-  },
+
   avatarStyle: {
     justifyContent: 'center',
     alignItems: 'center',
