@@ -46,7 +46,7 @@ export default class ChatBubble extends PureComponent {
             return (
                 <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                     {!sameN && !pos && this.renderAvatar()}
-                    <TouchableOpacity onPress={() => { this.props.imageView(this.props.item.link) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 45 } : null])}>
+                    <TouchableOpacity onPress={() => { this.props.imageView(this.props.item.link) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 65 } : null])}>
                         <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
                         <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
                             {!pos && this.props.item.status === 0 && "\n⏳"}
