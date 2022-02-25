@@ -26,7 +26,7 @@ export default class ChatBat extends Component {
         msg: text,
         type: 1,
         status: 2,
-        createdAt: "20-20-2022:10:50:12",
+        createdAt: new Date().toISOString(),
         image: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'
       }
       messages.unshift(msg)
@@ -38,7 +38,7 @@ export default class ChatBat extends Component {
   }
 
   renderItem = (item, index) => {
-    console.log(index + 1 + " " + JSON.stringify(item));
+    //console.log(index + 1 + " " + JSON.stringify(item));
     return (<View style={{ scaleY: -1 }}>
       <ChatBubble
         userId="Ahmed"
