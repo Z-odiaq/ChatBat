@@ -16,9 +16,58 @@ export default class ChatBubble extends PureComponent {
 
     }
 
+    dateDifference(date2, date1) {
+        const msPerDay = 1000 * 60 * 60;
+
+        // Discard the time and time-zone information.
+        const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+        const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+        return Math.floor((utc2 - utc1) / msPerDay);
+    }
+
+
     renderAvatar() {
         return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
     }
+
+    getDate() {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        const dateN = new Date(this.props.nextItem.createdAt)
+        const dateCurr = new Date(this.props.item.createdAt)
+        const diff = this.dateDifference(dateN, dateCurr)
+       // console.log(dateCurr.getDate() + " " + dateCurr.getDay() + " " + dateCurr.getHours() + " " + dateCurr.getTime() + " " + dateCurr.getMonth() + " " + dateCurr.toTimeString() + " ");
+        //console.log(months[dateCurr.getMonth()] + " " + dateCurr.getMonth());
+
+        if (diff > 365*24) {
+            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDay()+1) +" "+ dateCurr.getFullYear() + " AT " + dateCurr.getHours() + ":" + dateCurr.getMinutes())
+        } else if (diff > 30*24) {
+            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDay()+1) +" "+ " AT " + dateCurr.getHours() + ":" + dateCurr.getMinutes())
+        } else if (diff > 24) {
+            return (days[dateCurr.getDay()] + " AT " + dateCurr.getHours() + ":" + dateCurr.getMinutes())
+        } else if (diff > 1) {
+            //console.log(diff);
+            return (dateCurr.getHours() + ":" + dateCurr.getMinutes())
+        } else  {
+            console.log(diff);
+            return null
+        }
+
+
+
+        return
+    }
+
+    getWeek() {
+        return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
+    }
+
+    getTime() {
+        return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
+    }
+
 
     renderByType = () => {
         const pos = this.props.item.user === this.props.userId;
@@ -26,19 +75,24 @@ export default class ChatBubble extends PureComponent {
 
         const sameN = this.props.item.user === this.props.nextItem.user;
         const sameP = this.props.item.user === this.props.prevItem.user;
+        const date = this.getDate(); 
         if (this.props.item.type === 1) {//type = text
             return (
-                <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
-                    {!sameN && !pos && this.renderAvatar()}
-                    <View style={pos ?
-                        (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) :
-                        (sameN ? sameP ? styles.leftBlockMid : styles.leftBlockUp : sameP ? styles.leftBlockDown : styles.leftBlockOnly)}>
-                        <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}</Text>
-                        <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
-                            {!pos && this.props.item.status === 0 && "\n⏳"}
-                            {!pos && this.props.item.status === 1 && "\n✓"}
-                            {!pos && this.props.item.status === 2 && "\n✓✓"}
-                        </Text>
+                <View>
+                   { date && <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>──── {date} ────</Text>}
+
+                    <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
+                        {!sameN && !pos && this.renderAvatar()}
+                        <View style={pos ?
+                            (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) :
+                            (sameN ? sameP ? styles.leftBlockMid : styles.leftBlockUp : sameP ? styles.leftBlockDown : styles.leftBlockOnly)}>
+                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}</Text>
+                            <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
+                                {!pos && this.props.item.status === 0 && "\n⏳"}
+                                {!pos && this.props.item.status === 1 && "\n✓"}
+                                {!pos && this.props.item.status === 2 && "\n✓✓"}
+                            </Text>
+                        </View>
                     </View>
                 </View>
             )
@@ -209,7 +263,7 @@ const styles = StyleSheet.create({
     rightBlockMid: {
 
         borderBottomRightRadius: 5,
-        borderTopRightRadius: 5,
+        borderTopRightRadius: 15,
         borderTopLeftRadius: 20,
         borderBottomLeftRadius: 20,
         flexDirection: 'row',
@@ -227,7 +281,7 @@ const styles = StyleSheet.create({
     rightBlockDown: {
 
         borderBottomRightRadius: 0,
-        borderTopRightRadius: 5,
+        borderTopRightRadius: 15,
         borderTopLeftRadius: 20,
         borderBottomLeftRadius: 20,
         flexDirection: 'row',
@@ -246,10 +300,7 @@ const styles = StyleSheet.create({
     },
     rightBlockOnly: {
 
-        borderBottomRightRadius: 0,
-        borderTopRightRadius: 15,
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
+        borderRadius: 15,
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginRight: 5,
@@ -270,7 +321,7 @@ const styles = StyleSheet.create({
     leftBlockUp: {
 
         borderBottomLeftRadius: 5,
-        borderTopLefttRadius: 5,
+        borderTopLefttRadius: 15,
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
         flexDirection: 'row',
@@ -289,7 +340,7 @@ const styles = StyleSheet.create({
     },
     leftBlockMid: {
         borderBottomLeftRadius: 5,
-        borderTopLefttRadius: 5,
+        borderTopLefttRadius: 15,
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
         marginBottom: 5,
@@ -310,7 +361,7 @@ const styles = StyleSheet.create({
 
         borderBottomRightRadius: 20,
         borderTopRightRadius: 20,
-        borderTopLeftRadius: 5,
+        borderTopLeftRadius: 15,
         borderBottomLeftRadius: 0,
 
         flexDirection: 'row',
@@ -330,10 +381,7 @@ const styles = StyleSheet.create({
     },
     leftBlockOnly: {
 
-        borderBottomLeftRadius: 0,
-        borderTopLeftRadius: 15,
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15,
+        borderRadius: 15,
 
         flexDirection: 'row',
         alignItems: 'flex-end',
@@ -376,16 +424,16 @@ const styles = StyleSheet.create({
         fontSize: 8,
         color: '#00A6ED',
         fontWeight: '600',
-        position:"absolute",
-        right:".5%"
+        position: "absolute",
+        right: ".5%"
 
     },
     msgTxtLeftStatus: {
         fontSize: 8,
         color: '#00A6ED',
         fontWeight: '600',
-        position:"absolute",
-        left:"100%"
+        position: "absolute",
+        left: "100%"
     },
     msgTxtRight: {
         fontSize: 16,
