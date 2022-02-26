@@ -17,13 +17,13 @@ export default class ChatBubble extends PureComponent {
     }
 
     dateDifference(date2, date1) {
-        const msPerDay = 1000 * 60 * 60;
+        const msPerDay = 1000 * 60 * 60 * 24;
 
         // Discard the time and time-zone information.
         const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
         const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
 
-        return Math.floor((utc2 - utc1) / msPerDay);
+        return Math.floor(24 * ((utc2 - utc1) / msPerDay));
     }
 
 
@@ -31,27 +31,27 @@ export default class ChatBubble extends PureComponent {
         return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
     }
 
-    getDate() {
+    getDate(sameN, sameP) {
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
         const dateN = new Date(this.props.nextItem.createdAt)
         const dateCurr = new Date(this.props.item.createdAt)
         const diff = this.dateDifference(dateN, dateCurr)
-       // console.log(dateCurr.getDate() + " " + dateCurr.getDay() + " " + dateCurr.getHours() + " " + dateCurr.getTime() + " " + dateCurr.getMonth() + " " + dateCurr.toTimeString() + " ");
+        // console.log(dateCurr.getDate() + " " + dateCurr.getDate() + " " + dateCurr.getHours() + " " + dateCurr.getTime() + " " + dateCurr.getMonth() + " " + dateCurr.toTimeString() + " ");
         //console.log(months[dateCurr.getMonth()] + " " + dateCurr.getMonth());
 
-        if (diff > 365*24) {
-            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDay()+1) +" "+ dateCurr.getFullYear() + " AT " + dateCurr.getHours() + ":" + dateCurr.getMinutes())
-        } else if (diff > 30*24) {
-            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDay()+1) +" "+ " AT " + dateCurr.getHours() + ":" + dateCurr.getMinutes())
-        } else if (diff > 24) {
-            return (days[dateCurr.getDay()] + " AT " + dateCurr.getHours() + ":" + dateCurr.getMinutes())
-        } else if (diff > 1) {
+        if (dateCurr.getFullYear() !== dateN.getFullYear()) {
+            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDate() ) + ", " + dateCurr.getFullYear() + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes()<10? "0"+ dateCurr.getMinutes(): dateCurr.getMinutes() ))
+        } else if (dateCurr.getMonth() !== dateN.getMonth()) {
+            return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate() ) + " " + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes()<10? "0"+ dateCurr.getMinutes(): dateCurr.getMinutes() ))
+        } else if (dateCurr.getDate() !== dateN.getDate()) {
+            return (days[dateCurr.getDate()] + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes()<10? "0"+ dateCurr.getMinutes(): dateCurr.getMinutes() ))
+        } else if (dateCurr.getHours() !== dateN.getHours()) {
             //console.log(diff);
-            return (dateCurr.getHours() + ":" + dateCurr.getMinutes())
-        } else  {
-            console.log(diff);
+            return ((dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes()<10? "0"+ dateCurr.getMinutes(): dateCurr.getMinutes() ))
+        } else {
+            console.log(diff + " " + dateCurr + " " + dateN);
             return null
         }
 
@@ -75,18 +75,18 @@ export default class ChatBubble extends PureComponent {
 
         const sameN = this.props.item.user === this.props.nextItem.user;
         const sameP = this.props.item.user === this.props.prevItem.user;
-        const date = this.getDate(); 
+        const date = this.getDate(sameN, sameP);
         if (this.props.item.type === 1) {//type = text
             return (
                 <View>
-                   { date && <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>──── {date} ────</Text>}
+                    {date && <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>──── {date} ────</Text>}
 
                     <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                         {!sameN && !pos && this.renderAvatar()}
                         <View style={pos ?
                             (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) :
                             (sameN ? sameP ? styles.leftBlockMid : styles.leftBlockUp : sameP ? styles.leftBlockDown : styles.leftBlockOnly)}>
-                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}</Text>
+                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}{this.props.item.createdAt}</Text>
                             <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
                                 {!pos && this.props.item.status === 0 && "\n⏳"}
                                 {!pos && this.props.item.status === 1 && "\n✓"}
