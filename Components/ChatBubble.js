@@ -32,26 +32,44 @@ export default class ChatBubble extends PureComponent {
     }
 
     getDate(sameN, sameP) {
+
+
+
+
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-        const dateN = new Date(this.props.nextItem.createdAt)
+
         const dateCurr = new Date(this.props.item.createdAt)
+        const dateN = new Date(this.props.nextItem.createdAt)
+
+        console.log(dateCurr.getFullYear() + " " + dateN.getFullYear());
+        console.log(dateCurr.getMonth() + " " + dateN.getMonth());
+        console.log(dateCurr.getDate() + " " + dateN.getDate());
+        console.log(dateCurr.getHours() + " " + dateN.getHours());
+
+        if (dateCurr.getHours() === dateN.getHours() && this.props.prevItem) {
+            return null
+        }
         const diff = this.dateDifference(dateN, dateCurr)
         // console.log(dateCurr.getDate() + " " + dateCurr.getDate() + " " + dateCurr.getHours() + " " + dateCurr.getTime() + " " + dateCurr.getMonth() + " " + dateCurr.toTimeString() + " ");
         //console.log(months[dateCurr.getMonth()] + " " + dateCurr.getMonth());
+        //console.log("null"+this.props.index);
 
-        if (dateCurr.getFullYear() !== dateN.getFullYear()) {
-            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDate() ) + ", " + dateCurr.getFullYear() + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes()<10? "0"+ dateCurr.getMinutes(): dateCurr.getMinutes() ))
+
+
+
+        if (!this.props.prevItem ||  dateCurr.getFullYear() !== dateN.getFullYear()) {
+            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDate()) + "," + dateCurr.getFullYear() )
         } else if (dateCurr.getMonth() !== dateN.getMonth()) {
-            return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate() ) + " " + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes()<10? "0"+ dateCurr.getMinutes(): dateCurr.getMinutes() ))
+            return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate()) )
         } else if (dateCurr.getDate() !== dateN.getDate()) {
-            return (days[dateCurr.getDate()] + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes()<10? "0"+ dateCurr.getMinutes(): dateCurr.getMinutes() ))
+            return (days[dateCurr.getDate()] + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
         } else if (dateCurr.getHours() !== dateN.getHours()) {
             //console.log(diff);
-            return ((dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes()<10? "0"+ dateCurr.getMinutes(): dateCurr.getMinutes() ))
+            return ((dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
         } else {
-            console.log(diff + " " + dateCurr + " " + dateN);
+            // console.log(+"else : " + diff + " " + dateCurr + " " + dateN);
             return null
         }
 
@@ -70,12 +88,15 @@ export default class ChatBubble extends PureComponent {
 
 
     renderByType = () => {
-        const pos = this.props.item.user === this.props.userId;
+        const pos = this.props.item.from === this.props.userId;
+        console.log(this.props.item.from === this.props.userId)
         const status = !pos && this.props.item.status === !pos && this.props.item.status;
 
-        const sameN = this.props.item.user === this.props.nextItem.user;
-        const sameP = this.props.item.user === this.props.prevItem.user;
+        const sameN = this.props.item.from === this.props.nextItem.from;
+        const sameP = this.props.item.from === this.props.prevItem.from;
         const date = this.getDate(sameN, sameP);
+
+
         if (this.props.item.type === 1) {//type = text
             return (
                 <View>
@@ -83,16 +104,17 @@ export default class ChatBubble extends PureComponent {
 
                     <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                         {!sameN && !pos && this.renderAvatar()}
-                        <View style={pos ?
+                        <View onPress={() => { textshow = !textshow; console.log(textshow) }} style={pos ?
                             (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) :
                             (sameN ? sameP ? styles.leftBlockMid : styles.leftBlockUp : sameP ? styles.leftBlockDown : styles.leftBlockOnly)}>
-                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}{this.props.item.createdAt}</Text>
+                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.text}{"\n" + this.props.item.createdAt}</Text>
                             <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
                                 {!pos && this.props.item.status === 0 && "\n⏳"}
                                 {!pos && this.props.item.status === 1 && "\n✓"}
                                 {!pos && this.props.item.status === 2 && "\n✓✓"}
                             </Text>
                         </View>
+
                     </View>
                 </View>
             )
@@ -242,9 +264,9 @@ const styles = StyleSheet.create({
     rightBlockUp: {
 
         borderBottomRightRadius: 5,
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20,
+        borderTopRightRadius: 15,
+        borderTopLeftRadius: 15,
+        borderBottomLeftRadius: 15,
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginTop: 5,
@@ -264,8 +286,8 @@ const styles = StyleSheet.create({
 
         borderBottomRightRadius: 5,
         borderTopRightRadius: 15,
-        borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20,
+        borderTopLeftRadius: 15,
+        borderBottomLeftRadius: 15,
         flexDirection: 'row',
         alignItems: 'flex-end',
         alignSelf: 'flex-end',
@@ -282,8 +304,8 @@ const styles = StyleSheet.create({
 
         borderBottomRightRadius: 0,
         borderTopRightRadius: 15,
-        borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20,
+        borderTopLeftRadius: 15,
+        borderBottomLeftRadius: 15,
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginRight: 5,
@@ -322,8 +344,8 @@ const styles = StyleSheet.create({
 
         borderBottomLeftRadius: 5,
         borderTopLefttRadius: 15,
-        borderTopRightRadius: 20,
-        borderBottomRightRadius: 20,
+        borderTopRightRadius: 15,
+        borderBottomRightRadius: 15,
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginLeft: 65,
@@ -348,7 +370,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         maxWidth: "60%",
-        borderRadius: 5,
+        borderRadius: 15,
         backgroundColor: '#fff',
         padding: 10,
         shadowRadius: 2,
@@ -370,7 +392,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
 
         maxWidth: "60%",
-        borderRadius: 5,
+        borderRadius: 15,
         backgroundColor: '#fff',
         padding: 10,
         shadowRadius: 2,
@@ -389,7 +411,6 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         marginTop: 5,
         maxWidth: "60%",
-        borderRadius: 5,
         backgroundColor: '#fff',
         padding: 10,
         shadowRadius: 2,
