@@ -41,8 +41,9 @@ export default class ChatBat extends Component {
     //console.log(index + 1 + " " + JSON.stringify(item));
     return (<View style={{ scaleY: -1 }}>
       <ChatBubble
-        userId="Ahmed"
+        userId={"6101b5c6b24b3971dfb70805"}
         item={item}
+        index={index}
         prevItem={index + 1 < this.props.messages.length && this.props.messages[index + 1]}
         nextItem={index != 0 && this.props.messages[index - 1]}
         friendAvatar={this.props.friendAvatar}
@@ -66,7 +67,7 @@ export default class ChatBat extends Component {
           onEndReached={this.onEndReached}
           ListEmptyComponent={this.renderChatEmpty}
           scrollEventThrottle={50}
-          keyExtractor={(item) => { return item.id }}
+          keyExtractor={(item) => { return item._id }}
           renderItem={({ item, index }) => this.renderItem(item, index)} />
         <Input onSend={(text) => this.send(text)}></Input>
       </View>
