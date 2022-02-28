@@ -23,9 +23,10 @@ export default class ChatBat extends Component {
       var msg = {
         id: Math.floor(Math.random() * 100000000) + 1,
         user: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
-        msg: text,
+        text: text,
         type: 1,
         status: 2,
+        key: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         image: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'
       }
@@ -44,6 +45,7 @@ export default class ChatBat extends Component {
         userId={"6101b5c6b24b3971dfb70805"}
         item={item}
         index={index}
+        key={item._id}
         prevItem={index + 1 < this.props.messages.length && this.props.messages[index + 1]}
         nextItem={index != 0 && this.props.messages[index - 1]}
         friendAvatar={this.props.friendAvatar}

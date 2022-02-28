@@ -31,25 +31,22 @@ export default class ChatBubble extends PureComponent {
         return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
     }
 
-    getDate(sameN, sameP) {
+    getDate(pos) {
 
 
 
 
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
+        const today = new Date();
 
         const dateCurr = new Date(this.props.item.createdAt)
-        const dateN = new Date(this.props.nextItem.createdAt)
+        const dateN = new Date(this.props.prevItem.createdAt)
 
-        console.log(dateCurr.getFullYear() + " " + dateN.getFullYear());
-        console.log(dateCurr.getMonth() + " " + dateN.getMonth());
-        console.log(dateCurr.getDate() + " " + dateN.getDate());
-        console.log(dateCurr.getHours() + " " + dateN.getHours());
+        console.log(dateCurr.getFullYear() + "-" + dateCurr.getMonth() + "-" + dateCurr.getDate() + " " + dateCurr.getHours() + ":" + dateCurr.getMinutes() + " " + pos);
 
         if (dateCurr.getHours() === dateN.getHours() && this.props.prevItem) {
-            return null
+            // return null
         }
         const diff = this.dateDifference(dateN, dateCurr)
         // console.log(dateCurr.getDate() + " " + dateCurr.getDate() + " " + dateCurr.getHours() + " " + dateCurr.getTime() + " " + dateCurr.getMonth() + " " + dateCurr.toTimeString() + " ");
@@ -57,21 +54,25 @@ export default class ChatBubble extends PureComponent {
         //console.log("null"+this.props.index);
 
 
-
-
-        if (!this.props.prevItem ||  dateCurr.getFullYear() !== dateN.getFullYear()) {
-            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDate()) + "," + dateCurr.getFullYear() )
+        if (dateCurr.getHours() === today.getHours()) {
+            return null
+        }
+        else if (!this.props.prevItem || dateCurr.getFullYear() !== dateN.getFullYear()) {
+            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDate()) + "," + dateCurr.getFullYear())
         } else if (dateCurr.getMonth() !== dateN.getMonth()) {
-            return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate()) )
+            return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate()))
         } else if (dateCurr.getDate() !== dateN.getDate()) {
-            return (days[dateCurr.getDate()] + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
+            return (days[dateCurr.getDay()] + ", " + dateCurr.getDate() + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
         } else if (dateCurr.getHours() !== dateN.getHours()) {
             //console.log(diff);
             return ((dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
-        } else {
-            // console.log(+"else : " + diff + " " + dateCurr + " " + dateN);
+        } else if (!pos) {
+            return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate()))
             return null
         }
+
+
+
 
 
 
@@ -89,18 +90,18 @@ export default class ChatBubble extends PureComponent {
 
     renderByType = () => {
         const pos = this.props.item.from === this.props.userId;
-        console.log(this.props.item.from === this.props.userId)
+        // console.log(this.props.item.from === this.props.userId)
         const status = !pos && this.props.item.status === !pos && this.props.item.status;
 
         const sameN = this.props.item.from === this.props.nextItem.from;
         const sameP = this.props.item.from === this.props.prevItem.from;
-        const date = this.getDate(sameN, sameP);
+        const date = this.getDate(sameN);
 
 
         if (this.props.item.type === 1) {//type = text
             return (
                 <View>
-                    {date && <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>──── {date} ────</Text>}
+                    {date && <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>── {date} ──</Text>}
 
                     <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                         {!sameN && !pos && this.renderAvatar()}
