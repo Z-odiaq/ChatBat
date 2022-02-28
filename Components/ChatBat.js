@@ -22,7 +22,7 @@ export default class ChatBat extends Component {
       var messages = this.props.messages;
       var msg = {
         id: Math.floor(Math.random() * 100000000) + 1,
-        user: Math.random() < 0.5 ? "Ahmed" : "Mohamed",
+        from: this.props.userId,
         text: text,
         type: 1,
         status: 2,
@@ -42,7 +42,7 @@ export default class ChatBat extends Component {
     //console.log(index + 1 + " " + JSON.stringify(item));
     return (<View style={{ scaleY: -1 }}>
       <ChatBubble
-        userId={"6101b5c6b24b3971dfb70805"}
+        userId={ this.props.userId}
         item={item}
         index={index}
         key={item._id}

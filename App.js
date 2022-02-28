@@ -731,7 +731,7 @@ console.log(this.state.messages.length)
           <ChatBat
             messages={this.state.messages}
             friendAvatar={"https://www.bootdey.com/img/Content/avatar/avatar1.png"}
-            user={"Ahmed"}
+            userId={"6101b5c6b24b3971dfb70805"}
             OnSend={(msg) => this.send(msg)}
           />
 
