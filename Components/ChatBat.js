@@ -27,7 +27,7 @@ export default class ChatBat extends Component {
         type: 1,
         status: 2,
         key: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
+        createdAt: "2022-02-16T20:40:03.410Z",
         image: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'
       }
       messages.unshift(msg)

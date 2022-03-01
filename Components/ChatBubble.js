@@ -31,7 +31,7 @@ export default class ChatBubble extends PureComponent {
         return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
     }
 
-    getDate(pos) {
+    getDate(sameN, sameP) {
 
 
 
@@ -41,9 +41,10 @@ export default class ChatBubble extends PureComponent {
         const today = new Date();
 
         const dateCurr = new Date(this.props.item.createdAt)
-        const dateN = new Date(this.props.prevItem.createdAt)
-
-        console.log(dateCurr.getFullYear() + "-" + dateCurr.getMonth() + "-" + dateCurr.getDate() + " " + dateCurr.getHours() + ":" + dateCurr.getMinutes() + " " + pos);
+        const dateP = new Date(this.props.prevItem.createdAt)
+        const dateN = new Date(this.props.nextItem.createdAt)
+        
+       // console.log(dateCurr.getFullYear() + "-" + dateCurr.getMonth() + "-" + dateCurr.getDate() + " " + dateCurr.getHours() + ":" + dateCurr.getMinutes() + " " + pos);
 
         if (dateCurr.getHours() === dateN.getHours() && this.props.prevItem) {
             // return null
@@ -57,19 +58,25 @@ export default class ChatBubble extends PureComponent {
         if (dateCurr.getHours() === today.getHours()) {
             return null
         }
-        else if (!this.props.prevItem || dateCurr.getFullYear() !== dateN.getFullYear()) {
+
+        if (!this.props.prevItem || dateCurr.getFullYear() !== dateN.getFullYear()) {
             return (months[dateCurr.getMonth()] + " " + (dateCurr.getDate()) + "," + dateCurr.getFullYear())
-        } else if (dateCurr.getMonth() !== dateN.getMonth()) {
+        }
+        if (this.props.item.text === "1010"){
+            console.log(dateCurr.getMonth());
+
+        }
+        if (dateCurr.getMonth() !== dateN.getMonth()) {
             return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate()))
-        } else if (dateCurr.getDate() !== dateN.getDate()) {
+        }
+        if (dateCurr.getDate() !== dateN.getDate() || dateCurr.getDate() !== dateP.getDate()) {
             return (days[dateCurr.getDay()] + ", " + dateCurr.getDate() + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
-        } else if (dateCurr.getHours() !== dateN.getHours()) {
+        }
+        if (dateCurr.getHours() !== dateN.getHours()) {
             //console.log(diff);
             return ((dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
-        } else if (!pos) {
-            return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate()))
-            return null
         }
+
 
 
 
@@ -95,7 +102,7 @@ export default class ChatBubble extends PureComponent {
 
         const sameN = this.props.item.from === this.props.nextItem.from;
         const sameP = this.props.item.from === this.props.prevItem.from;
-        const date = this.getDate(sameN);
+        const date = this.getDate(sameN, sameP);
 
 
         if (this.props.item.type === 1) {//type = text
