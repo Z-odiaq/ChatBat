@@ -43,36 +43,31 @@ export default class ChatBubble extends PureComponent {
         const dateCurr = new Date(this.props.item.createdAt)
         const dateP = new Date(this.props.prevItem.createdAt)
         const dateN = new Date(this.props.nextItem.createdAt)
-        
-       // console.log(dateCurr.getFullYear() + "-" + dateCurr.getMonth() + "-" + dateCurr.getDate() + " " + dateCurr.getHours() + ":" + dateCurr.getMinutes() + " " + pos);
 
-        if (dateCurr.getHours() === dateN.getHours() && this.props.prevItem) {
-            // return null
-        }
-        const diff = this.dateDifference(dateN, dateCurr)
-        // console.log(dateCurr.getDate() + " " + dateCurr.getDate() + " " + dateCurr.getHours() + " " + dateCurr.getTime() + " " + dateCurr.getMonth() + " " + dateCurr.toTimeString() + " ");
-        //console.log(months[dateCurr.getMonth()] + " " + dateCurr.getMonth());
-        //console.log("null"+this.props.index);
+        // console.log(dateCurr.getFullYear() + "-" + dateCurr.getMonth() + "-" + dateCurr.getDate() + " " + dateCurr.getHours() + ":" + dateCurr.getMinutes() + " " + pos);
 
+ 
 
         if (dateCurr.getHours() === today.getHours()) {
             return null
         }
 
-        if (!this.props.prevItem || dateCurr.getFullYear() !== dateN.getFullYear()) {
-            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDate()) + "," + dateCurr.getFullYear())
+        if (!this.props.prevItem || dateCurr.getFullYear() !== dateP.getFullYear()) {
+            return (months[dateCurr.getMonth()] + " " + (dateCurr.getDate()) + ", " + dateCurr.getFullYear())
         }
-        if (this.props.item.text === "1010"){
-            console.log(dateCurr.getMonth());
 
-        }
-        if (dateCurr.getMonth() !== dateN.getMonth()) {
+        //same year diff month
+        if (dateCurr.getMonth() !== dateP.getMonth()) {
             return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate()))
+        } 
+
+        //same month diff day
+        if (dateCurr.getDate() !== dateP.getDate() || dateCurr.getDate() !== dateP.getDate()) {
+            return (days[dateCurr.getDay()] + ", " + dateCurr.getDate() )
         }
-        if (dateCurr.getDate() !== dateN.getDate() || dateCurr.getDate() !== dateP.getDate()) {
-            return (days[dateCurr.getDay()] + ", " + dateCurr.getDate() + " AT " + (dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
-        }
-        if (dateCurr.getHours() !== dateN.getHours()) {
+
+        //same day diff hours
+        if (dateCurr.getHours() !== dateP.getHours()) {
             //console.log(diff);
             return ((dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
         }
@@ -107,19 +102,19 @@ export default class ChatBubble extends PureComponent {
 
         if (this.props.item.type === 1) {//type = text
             return (
-                <View>
-                    {date && <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>── {date} ──</Text>}
+                <View key={this.props.item.key}>
+                    {date && <Text style={{ fontSize: 12, color: "#808080", textAlign: "center" }}>{date}</Text>}
 
                     <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                         {!sameN && !pos && this.renderAvatar()}
                         <View onPress={() => { textshow = !textshow; console.log(textshow) }} style={pos ?
                             (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) :
                             (sameN ? sameP ? styles.leftBlockMid : styles.leftBlockUp : sameP ? styles.leftBlockDown : styles.leftBlockOnly)}>
-                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.text}{"\n" + this.props.item.createdAt}</Text>
-                            <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
-                                {!pos && this.props.item.status === 0 && "\n⏳"}
-                                {!pos && this.props.item.status === 1 && "\n✓"}
-                                {!pos && this.props.item.status === 2 && "\n✓✓"}
+                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.text}{"\n"+this.props.item.createdAt}</Text>
+                            <Text style={ styles.msgTxtRightStatus }>
+                                {!this.props.nextItem.from && pos && this.props.item.status === 0 && "\n🕒"}
+                                {!this.props.nextItem.from && pos && this.props.item.status === 1 && "\n✓"}
+                                {!this.props.nextItem.from && pos && this.props.item.status === 2 && "\n✓✓"}
                             </Text>
                         </View>
 
@@ -128,50 +123,53 @@ export default class ChatBubble extends PureComponent {
             )
         } else if (this.props.item.type === 2) { //type = image
             return (
-                <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
+                <View key={this.props.item.key} style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                     {!sameN && !pos && this.renderAvatar()}
                     <TouchableOpacity onPress={() => { this.props.imageView(this.props.item.link) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 65 } : null])}>
                         <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
                         <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
-                            {!pos && this.props.item.status === 0 && "\n⏳"}
-                            {!pos && this.props.item.status === 1 && "\n✓"}
-                            {!pos && this.props.item.status === 2 && "\n✓✓"}
+                            {pos && this.props.item.status === 0 && "\n⏳"}
+                            {pos && this.props.item.status === 1 && "\n✓"}
+                            {pos && this.props.item.status === 2 && "\n✓✓"}
                         </Text>
                     </TouchableOpacity>
                 </View>
             )
         } else if (this.props.item.type === 3) { //type == video
-            return (<View>
-                <View style={pos ? styles.rightMsg : styles.eachMsg}>
-                    <View style={pos ? ([styles.rightBlock, { borderRadius: 15, }]) : styles.msgBlock}>
-                        <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}</Text>
-                        <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
-                            {!pos && this.props.item.status === 0 && "\n⏳"}
-                            {!pos && this.props.item.status === 1 && "\n✓"}
-                            {!pos && this.props.item.status === 2 && "\n✓✓"}
-                        </Text>
+            return (
+                <View key={this.props.item.key}>
+                    <View style={pos ? styles.rightMsg : styles.eachMsg}>
+                        <View style={pos ? ([styles.rightBlock, { borderRadius: 15, }]) : styles.msgBlock}>
+                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}</Text>
+                            <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
+                                {!pos && this.props.item.status === 0 && "\n⏳"}
+                                {!pos && this.props.item.status === 1 && "\n✓"}
+                                {!pos && this.props.item.status === 2 && "\n✓✓"}
+                            </Text>
+                        </View>
                     </View>
-                </View>
-            </View>)
+                </View>)
         } else if (this.props.item.type === 0) { //type == server
-            return (<View>
-                <View style={styles.midMsg}>
-                    <View style={styles.midBlock}>
-                        <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>{this.props.item.msg}</Text>
-                        <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
-                            {!pos && this.props.item.status === 0 && "\n⏳"}
-                            {!pos && this.props.item.status === 1 && "\n✓"}
-                            {!pos && this.props.item.status === 2 && "\n✓✓"}
-                        </Text>
+            return (
+                <View key={this.props.item.key}>
+                    <View style={styles.midMsg}>
+                        <View style={styles.midBlock}>
+                            <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>{this.props.item.msg}</Text>
+                            <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
+                                {!pos && this.props.item.status === 0 && "\n⏳"}
+                                {!pos && this.props.item.status === 1 && "\n✓"}
+                                {!pos && this.props.item.status === 2 && "\n✓✓"}
+                            </Text>
+                        </View>
                     </View>
-                </View>
-            </View>)
+                </View>)
         }
     }
 
     render() {
         return (
-            <View>
+            <View key={this.props.item.key}>
+
                 {this.renderByType()}
             </View>
         );
@@ -451,19 +449,13 @@ const styles = StyleSheet.create({
     },
     msgTxtRightStatus: {
         fontSize: 8,
-        color: '#00A6ED',
+        color: '#fff',
         fontWeight: '600',
         position: "absolute",
         right: ".5%"
 
     },
-    msgTxtLeftStatus: {
-        fontSize: 8,
-        color: '#00A6ED',
-        fontWeight: '600',
-        position: "absolute",
-        left: "100%"
-    },
+
     msgTxtRight: {
         fontSize: 16,
         color: '#fff',
