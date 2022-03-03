@@ -31,7 +31,7 @@ export default class ChatBubble extends PureComponent {
         return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
     }
 
-    getDate(sameN, sameP) {
+    getDate(dateCurr) {
 
 
 
@@ -40,13 +40,12 @@ export default class ChatBubble extends PureComponent {
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const today = new Date();
 
-        const dateCurr = new Date(this.props.item.createdAt)
         const dateP = new Date(this.props.prevItem.createdAt)
         const dateN = new Date(this.props.nextItem.createdAt)
 
         // console.log(dateCurr.getFullYear() + "-" + dateCurr.getMonth() + "-" + dateCurr.getDate() + " " + dateCurr.getHours() + ":" + dateCurr.getMinutes() + " " + pos);
 
- 
+
 
         if (dateCurr.getHours() === today.getHours()) {
             return null
@@ -59,11 +58,11 @@ export default class ChatBubble extends PureComponent {
         //same year diff month
         if (dateCurr.getMonth() !== dateP.getMonth()) {
             return (months[dateCurr.getMonth()] + ", " + (dateCurr.getDate()))
-        } 
+        }
 
         //same month diff day
         if (dateCurr.getDate() !== dateP.getDate() || dateCurr.getDate() !== dateP.getDate()) {
-            return (days[dateCurr.getDay()] + ", " + dateCurr.getDate() )
+            return (days[dateCurr.getDay()] + ", " + dateCurr.getDate())
         }
 
         //same day diff hours
@@ -97,7 +96,9 @@ export default class ChatBubble extends PureComponent {
 
         const sameN = this.props.item.from === this.props.nextItem.from;
         const sameP = this.props.item.from === this.props.prevItem.from;
-        const date = this.getDate(sameN, sameP);
+        const dateCurr = new Date(this.props.item.createdAt)
+
+        const date = this.getDate(dateCurr);
 
 
         if (this.props.item.type === 1) {//type = text
@@ -110,12 +111,18 @@ export default class ChatBubble extends PureComponent {
                         <View onPress={() => { textshow = !textshow; console.log(textshow) }} style={pos ?
                             (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) :
                             (sameN ? sameP ? styles.leftBlockMid : styles.leftBlockUp : sameP ? styles.leftBlockDown : styles.leftBlockOnly)}>
-                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.text}{"\n"+this.props.item.createdAt}</Text>
-                            <Text style={ styles.msgTxtRightStatus }>
-                                {!this.props.nextItem.from && pos && this.props.item.status === 0 && "\n🕒"}
-                                {!this.props.nextItem.from && pos && this.props.item.status === 1 && "\n✓"}
-                                {!this.props.nextItem.from && pos && this.props.item.status === 2 && "\n✓✓"}
-                            </Text>
+                            <View>
+                                <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.text}</Text>
+                                <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                                    {!this.props.nextItem.from && pos && this.props.item.status === 0 && "\n🕒"}
+                                    {!this.props.nextItem.from && pos && this.props.item.status === 1 && "\n✓"}
+                                    {!this.props.nextItem.from && pos && this.props.item.status === 2 && "\n✓✓"}
+                                    {dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                                </Text>
+                            </View>
+
+
+
                         </View>
 
                     </View>
@@ -203,9 +210,9 @@ const styles = StyleSheet.create({
     ImageLeftBlock: {
 
         borderBottomLeftRadius: 0,
-        borderTopLefttRadius: 20,
-        borderTopRightRadius: 20,
-        borderBottomRightRadius: 20,
+        borderTopLefttRadius: 15,
+        borderTopRightRadius: 15,
+        borderBottomRightRadius: 15,
         marginTop: 5,
         marginRight: 5,
         marginBottom: 5,
@@ -269,7 +276,7 @@ const styles = StyleSheet.create({
     },
     rightBlockUp: {
 
-        borderBottomRightRadius: 5,
+        borderBottomRightRadius: 0,
         borderTopRightRadius: 15,
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
@@ -290,7 +297,7 @@ const styles = StyleSheet.create({
     },
     rightBlockMid: {
 
-        borderBottomRightRadius: 5,
+        borderBottomRightRadius: 0,
         borderTopRightRadius: 15,
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
@@ -348,7 +355,7 @@ const styles = StyleSheet.create({
 
     leftBlockUp: {
 
-        borderBottomLeftRadius: 5,
+        borderBottomLeftRadius: 0,
         borderTopLefttRadius: 15,
         borderTopRightRadius: 15,
         borderBottomRightRadius: 15,
@@ -367,10 +374,10 @@ const styles = StyleSheet.create({
         },
     },
     leftBlockMid: {
-        borderBottomLeftRadius: 5,
+        borderBottomLeftRadius: 0,
         borderTopLefttRadius: 15,
-        borderTopRightRadius: 20,
-        borderBottomRightRadius: 20,
+        borderTopRightRadius: 15,
+        borderBottomRightRadius: 15,
         marginBottom: 5,
         marginLeft: 65,
         flexDirection: 'row',
@@ -387,8 +394,8 @@ const styles = StyleSheet.create({
     },
     leftBlockDown: {
 
-        borderBottomRightRadius: 20,
-        borderTopRightRadius: 20,
+        borderBottomRightRadius: 15,
+        borderTopRightRadius: 15,
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 0,
 
@@ -449,7 +456,9 @@ const styles = StyleSheet.create({
     },
     msgTxtRightStatus: {
         fontSize: 8,
-        color: '#fff',
+
+        marginBottom: 8,
+        color: '#1DA1F2',
         fontWeight: '600',
         position: "absolute",
         right: ".5%"
@@ -464,6 +473,24 @@ const styles = StyleSheet.create({
     msgTxtLeft: {
         fontSize: 16,
         color: '#9A979F',
+        fontWeight: '600',
+    },
+    timeLeft: {
+        fontSize: 10,
+        color: '#9A979F',
+        marginBottom: -8,
+        marginRight: -4,
+        marginTop: 2,
+        textAlign: "right",
+        fontWeight: '600',
+    },
+    timeRight: {
+        fontSize: 10,
+        color: '#fff',
+        marginBottom: -8,
+        marginRight: -4,
+        marginTop: 2,
+        textAlign: "right",
         fontWeight: '600',
     },
 
