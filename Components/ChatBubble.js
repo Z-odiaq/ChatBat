@@ -5,16 +5,37 @@ import {
     View,
     TouchableOpacity,
     Image,
+    AppState
 } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 export default class ChatBubble extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            appState: AppState.currentState
 
         };
 
     }
+
+
+    componentDidMount() {
+        AppState.addEventListener('change', this._handleAppStateChange);
+
+
+    }
+
+    componentWillUnmount() {
+        //AppState.removeEventListener('change', this._handleAppStateChange);
+    }
+
+    _handleAppStateChange = (nextAppState) => {
+        this.setState({ appState: nextAppState });
+    }
+
+
+
 
     dateDifference(date2, date1) {
         const msPerDay = 1000 * 60 * 60 * 24;
@@ -114,15 +135,10 @@ export default class ChatBubble extends PureComponent {
                             <View>
                                 <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.text}</Text>
                                 <Text style={pos ? styles.timeRight : styles.timeLeft}>
-                                    {!this.props.nextItem.from && pos && this.props.item.status === 0 && "\n🕒"}
-                                    {!this.props.nextItem.from && pos && this.props.item.status === 1 && "\n✓"}
-                                    {!this.props.nextItem.from && pos && this.props.item.status === 2 && "\n✓✓"}
-                                    {dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                                    {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
+                                    {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
                                 </Text>
                             </View>
-
-
-
                         </View>
 
                     </View>
@@ -133,29 +149,38 @@ export default class ChatBubble extends PureComponent {
                 <View key={this.props.item.key} style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                     {!sameN && !pos && this.renderAvatar()}
                     <TouchableOpacity onPress={() => { this.props.imageView(this.props.item.link) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 65 } : null])}>
-                        <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
-                        <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
-                            {pos && this.props.item.status === 0 && "\n⏳"}
-                            {pos && this.props.item.status === 1 && "\n✓"}
-                            {pos && this.props.item.status === 2 && "\n✓✓"}
-                        </Text>
+                        <View>
+                            <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
+                            <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                                {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
+                                {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                            </Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
             )
         } else if (this.props.item.type === 3) { //type == video
             return (
-                <View key={this.props.item.key}>
-                    <View style={pos ? styles.rightMsg : styles.eachMsg}>
-                        <View style={pos ? ([styles.rightBlock, { borderRadius: 15, }]) : styles.msgBlock}>
-                            <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.msg}</Text>
-                            <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
-                                {!pos && this.props.item.status === 0 && "\n⏳"}
-                                {!pos && this.props.item.status === 1 && "\n✓"}
-                                {!pos && this.props.item.status === 2 && "\n✓✓"}
+                <View key={this.props.item.key} style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
+                    {!sameN && !pos && this.renderAvatar()}
+                    {this.state.appState == 'active' &&
+                        <WebView
+                            style={{ flex: 1 }}
+                            javaScriptEnabled={true}
+                            source={{ uri:  "https://www.youtube.com/embed/ZZ5LpwO-An4?rel=0&autoplay=0&showinfo=0&controls=0" }}
+                        />
+                    }
+                    {/* <TouchableOpacity onPress={() => { this.props.VideoView(this.props.item.link) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 65 } : null])}>
+                        <View>
+                            <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
+                            <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                                {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
+                                {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
                             </Text>
                         </View>
-                    </View>
-                </View>)
+                    </TouchableOpacity> */}
+                </View>
+            )
         } else if (this.props.item.type === 0) { //type == server
             return (
                 <View key={this.props.item.key}>

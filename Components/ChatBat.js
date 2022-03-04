@@ -21,7 +21,7 @@ export default class ChatBat extends Component {
     if (text.length > 0) {
       var messages = this.props.messages;
       var msg = {
-        id: Math.floor(Math.random() * 100000000) + 1,
+        id: Math.floor(Math.random() * 100000000) ,
         from: this.props.userId,
         text: text,
         type: 1,
@@ -64,9 +64,9 @@ export default class ChatBat extends Component {
           data={this.props.messages}
           inverted={false}
           onEndReached={this.onEndReached}
-          ref={(ref) => { this.flatListRef = ref; }}
+         // ref={(ref) => { this.flatListRef = ref; }}
           onEndReachedThreshold={0.1}
-          onEndReached={this.onEndReached}
+         // onEndReached={this.onEndReached}
           ListEmptyComponent={this.renderChatEmpty}
           scrollEventThrottle={50}
           keyExtractor={(item) => { return item._id }}

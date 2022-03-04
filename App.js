@@ -24,97 +24,98 @@ export default class Chat extends Component {
     this.state = {
       msg: '',
       messages: [
-        
-          {
-              "system": false,
-              "status": 0,
-              "_id": "620d612358c088297464e677",
-              "from": "610182b837c05541b8f7c457",
-              "link": "",
-              "conversationId": "6123e75a39a7ed3b3c2c325f",
-              "text": "egergergeeruiyui",
-              "type": 1,
-              "createdAt": "2015-06-16T20:40:03.410Z",
-              "updatedAt": "2022-02-16T20:40:03.410Z",
-              "__v": 0
-          },
-          {
-              "system": false,
-              "status": 0,
-              "_id": "620d60d958c088297464e676",
-              "from": "610182b837c05541b8f7c457",
-              "link": "",
-              "conversationId": "6123e75a39a7ed3b3c2c325f",
-              "text": "22",
-              "type": 1,
-              "createdAt": "2016-02-16T20:38:49.997Z",
-              "updatedAt": "2022-02-16T20:38:49.997Z",
-              "__v": 0
-          },
-          {
-              "system": false,
-              "status": 0,
-              "_id": "620930db63b88510045a1959",
-              "from": "610182b837c05541b8f7c457",
-              "link": "",
-              "conversationId": "6123e75a39a7ed3b3c2c325f",
-              "text": "ghghgh",
-              "type": 1,
-              "createdAt": "2022-03-13T16:24:59.375Z",
-              "updatedAt": "2022-02-13T16:24:59.375Z",
-              "__v": 0
-          },
-          {
-              "system": false,
-              "status": 0,
-              "_id": "620930d963b88510045a1958",
-              "from": "610182b837c05541b8f7c457",
-              "link": "",
-              "conversationId": "6123e75a39a7ed3b3c2c325f",
-              "text": "hghghgh",
-              "type": 1,
-              "createdAt": "2022-03-13T16:24:57.544Z",
-              "updatedAt": "2022-02-13T16:24:57.544Z",
-              "__v": 0
-          },
-          {
-              "system": false,
-              "status": 0,
-              "_id": "620930d763b88510045a1957",
-              "from": "610182b837c05541b8f7c457",
-              "link": "",
-              "conversationId": "6123e75a39a7ed3b3c2c325f",
-              "text": "hghgh",
-              "type": 1,
-              "createdAt": "2022-04-13T16:24:55.209Z",
-              "updatedAt": "2022-02-13T16:24:55.209Z",
-              "__v": 0
-          },
-          {
-              "system": false,
-              "status": 0,
-              "_id": "62092cc163b88510045a1955",
-              "from": "610182b837c05541b8f7c457",
-              "link": "",
-              "conversationId": "6123e75a39a7ed3b3c2c325f",
-              "text": "dsdsdsdsd",
-              "type": 1,
-              "createdAt": "2022-05-13T16:07:29.992Z",
-              "updatedAt": "2022-02-13T16:07:29.992Z",
-              "__v": 0
-          },
-          {
-            "system": false,
-            "status": 0,
-            "_id": "62092cc163b8q510045a1955",
-            "from": "610182b837c05541b8f7c457",
-            "link": "",
-            "conversationId": "6123e75a39a7ed3b3c2c325f",
-            "text": "dsdsdsdsd",
-            "type": 1,
-            "createdAt": "2022-05-15T16:07:29.992Z",
-            "updatedAt": "2022-02-13T16:07:29.992Z",
-            "__v": 0
+
+        {
+          "system": false,
+          "status": 0,
+          "_id": "620d612358c088297464e677",
+          "from": "610182b837c05541b8f7c457",
+          "link": "https://www.youtube.com/embed/ZZ5LpwO-An4?rel=0&autoplay=0&showinfo=0&controls=0",
+          "conversationId": "6123e75a39a7ed3b3c2c325f",
+          "text": "egergergeeruiyui",
+          "type": 3,
+          "createdAt": "2015-06-16T20:40:03.410Z",
+          "updatedAt": "2022-02-16T20:40:03.410Z",
+          "__v": 0
+        },
+        {
+          "system": false,
+          "status": 0,
+          "_id": "620d60d958c088297464e676",
+          "from": "610182b837c05541b8f7c457",
+          "link": "",
+          "conversationId": "6123e75a39a7ed3b3c2c325f",
+          "text": "22",
+          "type": 1,
+          "createdAt": "2016-02-16T20:38:49.997Z",
+          "updatedAt": "2022-02-16T20:38:49.997Z",
+          "__v": 0
+        },
+        {
+          "system": false,
+          "status": 0,
+          "_id": "620930db63b88510045a1959",
+          "from": "610182b837c05541b8f7c457",
+          "link": "",
+          "conversationId": "6123e75a39a7ed3b3c2c325f",
+          "text": "ghghgh",
+          "type": 2,
+          "link": "https://picsum.photos/200/300?random=" + Math.floor(Math.random() * 10),
+          "createdAt": "2022-03-13T16:24:59.375Z",
+          "updatedAt": "2022-02-13T16:24:59.375Z",
+          "__v": 0
+        },
+        {
+          "system": false,
+          "status": 0,
+          "_id": "620930d963b88510045a1958",
+          "from": "610182b837c05541b8f7c457",
+          "link": "",
+          "conversationId": "6123e75a39a7ed3b3c2c325f",
+          "text": "hghghgh",
+          "type": 1,
+          "createdAt": "2022-03-13T16:24:57.544Z",
+          "updatedAt": "2022-02-13T16:24:57.544Z",
+          "__v": 0
+        },
+        {
+          "system": false,
+          "status": 0,
+          "_id": "620930d763b88510045a1957",
+          "from": "610182b837c05541b8f7c457",
+          "link": "",
+          "conversationId": "6123e75a39a7ed3b3c2c325f",
+          "text": "hghgh",
+          "type": 1,
+          "createdAt": "2022-04-13T16:24:55.209Z",
+          "updatedAt": "2022-02-13T16:24:55.209Z",
+          "__v": 0
+        },
+        {
+          "system": false,
+          "status": 0,
+          "_id": "62092cc163b88510045a1955",
+          "from": "610182b837c05541b8f7c457",
+          "link": "",
+          "conversationId": "6123e75a39a7ed3b3c2c325f",
+          "text": "dsdsdsdsd",
+          "type": 1,
+          "createdAt": "2022-05-13T16:07:29.992Z",
+          "updatedAt": "2022-02-13T16:07:29.992Z",
+          "__v": 0
+        },
+        {
+          "system": false,
+          "status": 0,
+          "_id": "62092cc163b8q510045a1955",
+          "from": "610182b837c05541b8f7c457",
+          "link": "",
+          "conversationId": "6123e75a39a7ed3b3c2c325f",
+          "text": "dsdsdsdsd",
+          "type": 1,
+          "createdAt": "2022-05-15T16:07:29.992Z",
+          "updatedAt": "2022-02-13T16:07:29.992Z",
+          "__v": 0
         },
         {
           "system": false,
@@ -128,42 +129,46 @@ export default class Chat extends Component {
           "createdAt": "2022-05-16T16:07:29.992Z",
           "updatedAt": "2022-02-13T16:07:29.992Z",
           "__v": 0
-      },
-      {
-        "system": false,
-        "status": 0,
-        "_id": "62092cc163bss510ss5a1955",
-        "from": "610182b837c05541b8f7c457",
-        "link": "",
-        "conversationId": "6123e75a39a7ed3b3c2c325f",
-        "text": "dsdsdsdsd",
-        "type": 1,
-        "createdAt": "2022-05-16T18:07:29.992Z",
-        "updatedAt": "2022-02-13T16:07:29.992Z",
-        "__v": 0
-    },
+        },
+        {
+          "system": false,
+          "status": 0,
+          "_id": "62092cc163bss510ss5a1955",
+          "from": "610182b837c05541b8f7c457",
+          "link": "",
+          "conversationId": "6123e75a39a7ed3b3c2c325f",
+          "text": "dsdsdsdsd",
+          "type": 1,
+          "createdAt": "2022-05-16T18:07:29.992Z",
+          "updatedAt": "2022-02-13T16:07:29.992Z",
+          "__v": 0
+        }
       ],
-      messsages: []
+      messsages: [],
+
     };
 
     for (var i = 0; i < 10; i++) {
-     let m = Math.random() < 0.2 ? Math.random() < 0.1 ? 0 : 2 : 1;
+      let m = Math.random() < 0.2 ? Math.random() < 0.1 ? 0 : 2 : 1;
       this.state.messsages.push({
         _id: Math.floor(Math.random() * 100000000) + 1,
         from: Math.random() < 0.5 ? "6101b5c6b24b3971dfb70805" : "Mohamed",
         text: i, //m==0? this.sentence(2) : this.sentence(20),
-        type: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 2 : 1 ,
+        type: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 2 : 1,
         link: "https://picsum.photos/200/300?random=" + Math.floor(Math.random() * 10),
         status: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 2 : 1,
-        createdAt:new Date((new Date()) - Math.floor(Math.random()*10000000000+1)).toISOString()
+        createdAt: new Date((new Date()) - Math.floor(Math.random() * 10000000000 + 1)).toISOString()
       })
     }
-console.log(this.state.messages.length)
+    console.log(this.state.messages.length)
 
   }
 
 
-   sentence (m) {
+
+
+
+  sentence(m) {
     const words = ["a", "ac", "accumsan", "ad", "adipiscing", "aenean", "aenean", "aliquam", "aliquam", "aliquet", "amet", "ante", "aptent", "arcu", "at", "auctor", "augue", "bibendum", "blandit", "class", "commodo", "condimentum", "congue", "consectetur", "consequat", "conubia", "convallis", "cras", "cubilia", "curabitur", "curabitur", "curae", "cursus", "dapibus", "diam", "dictum", "dictumst", "dolor", "donec", "donec", "dui", "duis", "egestas", "eget", "eleifend", "elementum", "elit", "enim", "erat", "eros", "est", "et", "etiam", "etiam", "eu", "euismod", "facilisis", "fames", "faucibus", "felis", "fermentum", "feugiat", "fringilla", "fusce", "gravida", "habitant", "habitasse", "hac", "hendrerit", "himenaeos", "iaculis", "id", "imperdiet", "in", "inceptos", "integer", "interdum", "ipsum", "justo", "lacinia", "lacus", "laoreet", "lectus", "leo", "libero", "ligula", "litora", "lobortis", "lorem", "luctus", "maecenas", "magna", "malesuada", "massa", "mattis", "mauris", "metus", "mi", "molestie", "mollis", "morbi", "nam", "nec", "neque", "netus", "nibh", "nisi", "nisl", "non", "nostra", "nulla", "nullam", "nunc", "odio", "orci", "ornare", "pellentesque", "per", "pharetra", "phasellus", "placerat", "platea", "porta", "porttitor", "posuere", "potenti", "praesent", "pretium", "primis", "proin", "pulvinar", "purus", "quam", "quis", "quisque", "quisque", "rhoncus", "risus", "rutrum", "sagittis", "sapien", "scelerisque", "sed", "sem", "semper", "senectus", "sit", "sociosqu", "sodales", "sollicitudin", "suscipit", "suspendisse", "taciti", "tellus", "tempor", "tempus", "tincidunt", "torquent", "tortor", "tristique", "turpis", "ullamcorper", "ultrices", "ultricies", "urna", "ut", "ut", "varius", "vehicula", "vel", "velit", "venenatis", "vestibulum", "vitae", "vivamus", "viverra", "volutpat", "vulputate"];
     const count = Math.round(Math.abs(20) * 1 + m);
     var result = [];
@@ -172,11 +177,11 @@ console.log(this.state.messages.length)
       var rnd = words[pos];
       result.push(rnd);
     }
-   // console.log(result);
+    // console.log(result);
     return result.join(' ');
 
   }
-  
+
   componentDidUpdate(prevProps = {}) {
     //setTimeout(() => this.scrollToBottom(false), 200);
   }
