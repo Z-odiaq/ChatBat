@@ -5,15 +5,20 @@ import {
     View,
     TouchableOpacity,
     Image,
-    AppState
+    AppState,
+    Alert,
+    Dimensions,
+    Modal,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
+const { width, height } = Dimensions.get('window');
 
 export default class ChatBubble extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            appState: AppState.currentState
+            appState: AppState.currentState,
+            playVid: false,
 
         };
 
@@ -109,6 +114,56 @@ export default class ChatBubble extends PureComponent {
         return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
     }
 
+    getYTId(url) {
+        var ID = '';
+        url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+        if (url[2] !== undefined) {
+            ID = url[2].split(/[^0-9a-z_\-]/i);
+            ID = ID[0];
+        }
+        else {
+            ID = url;
+        }
+
+        return ID;
+    }
+
+    displaySpinner() {
+        return (
+            <View style={{ flex: 1 }}>
+                <Spinner color="blue" />
+            </View>
+        );
+    }
+
+    displayError() {
+        Alert.alert(
+            "no_internet",
+            "require_internet_connection",
+            [
+                { text: 'OK', onPress: () => this.props.navigation.goBack() },
+            ],
+            { cancelable: false });
+    }
+
+    videoRender = () => {
+        return (
+            <Modal visible={this.state.playVid} onRequestClose={this.setState({ playVid: false })}>
+                <View style={styles.modal}>
+                    <View style={styles.modalContainer}>
+                        <WebView
+                            style={{ height: 400 }}
+                            javaScriptEnabled={true}
+                            source={{
+                                uri: this.props.item.link
+                            }}
+                        />
+                    </View>
+                </View>
+            </Modal>
+        )
+
+    }
 
     renderByType = () => {
         const pos = this.props.item.from === this.props.userId;
@@ -161,15 +216,91 @@ export default class ChatBubble extends PureComponent {
             )
         } else if (this.props.item.type === 3) { //type == video
             return (
-                <View key={this.props.item.key} style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
-                    {!sameN && !pos && this.renderAvatar()}
-                    {this.state.appState == 'active' &&
+
+                <View key={this.props.item.key}>
+                    {date && <Text style={{ fontSize: 12, color: "#808080", textAlign: "center" }}>{date}</Text>}
+
+                    <View style={pos ? null : [{ alignContent:"center",alignItems:"center", backgroundColor:"#fff", padding:10,borderRadius:10, width:"80%" ,marginLeft:65}]}>
+                        {!sameN && !pos && this.renderAvatar()}
+                        <View  style={{ }}>
+                            <View style={{ height: height / 3, width: width / 1.4 }}>
+                                <View style={{ flex: 1, alignContent: "center", }}>
+                                    <WebView
+                                        style={{ backgroundColor: "#fff", flex: 1 }}
+                                        renderLoading={() => {
+                                            return this.displaySpinner();
+                                        }}
+                                        javaScriptEnabled={true}
+                                        source={{
+                                            uri: this.props.item.link
+                                        }}
+                                    />
+                                    <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                                        {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
+                                        {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                                    </Text>
+                                </View>
+
+                            </View>
+                        </View>
+
+                    </View>
+
+
+
+
+                    {/* {!this.state.playVid ?
+                        <TouchableOpacity onPress={() => { this.setState({ playVid: true }) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 65 } : null])}>
+                            <View>
+                                <Image source={{ uri: "https://img.youtube.com/vi/" + this.getYTId(this.props.item.link) + "/0.jpg" }} style={{ width: 200, height: 200, borderRadius: 5 }} />
+                                <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                                    {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
+                                    {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                                </Text>
+                            </View>
+                        </TouchableOpacity> 
+                        :
+                        <View style={styles.modal}>
+                            <View style={styles.modalContainer}>
+                                <WebView
+                                    style={{ height: 400 }}
+                                    renderLoading={() => {
+                                        return this.displaySpinner();
+                                      }}
+                                    javaScriptEnabled={true}
+                                    source={{
+                                        uri: this.props.item.link
+                                    }}
+                                />
+                            </View>
+                        </View>} */}
+                    {/* <View key={this.props.item.key} style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
+                        {!sameN && !pos && this.renderAvatar()}
                         <WebView
-                            style={{ flex: 1 }}
+                            style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, { height: 400, width: 400, backgroundColor: "#fff", padding: 20, marginLeft: 65, borderRadius: 5, flex: 1 }])}
+                            renderLoading={() => {
+                                return this.displaySpinner();
+                            }}
                             javaScriptEnabled={true}
-                            source={{ uri:  "https://www.youtube.com/embed/ZZ5LpwO-An4?rel=0&autoplay=0&showinfo=0&controls=0" }}
+                            source={{
+                                uri: this.props.item.link
+                            }}
                         />
-                    }
+                        <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                            {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
+                            {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                        </Text>
+
+                    </View> */}
+
+
+
+
+
+
+
+
+
                     {/* <TouchableOpacity onPress={() => { this.props.VideoView(this.props.item.link) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 65 } : null])}>
                         <View>
                             <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
@@ -177,8 +308,7 @@ export default class ChatBubble extends PureComponent {
                                 {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
                                 {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
                             </Text>
-                        </View>
-                    </TouchableOpacity> */}
+                        </View>*/}
                 </View>
             )
         } else if (this.props.item.type === 0) { //type == server
@@ -215,9 +345,9 @@ const styles = StyleSheet.create({
     },
     ImageRightBlock: {
         borderBottomRightRadius: 0,
-        borderTopRightRadius: 15,
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginTop: 5,
@@ -235,9 +365,9 @@ const styles = StyleSheet.create({
     ImageLeftBlock: {
 
         borderBottomLeftRadius: 0,
-        borderTopLefttRadius: 15,
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15,
+        borderTopLefttRadius: 10,
+        borderTopRightRadius: 10,
+        bborderBottomRightRadius: 10,
         marginTop: 5,
         marginRight: 5,
         marginBottom: 5,
@@ -283,7 +413,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         margin: 5,
-        maxWidth: "60%",
+        maxWidth: "70%",
         borderRadius: 5,
         backgroundColor: '#fff',
         padding: 10,
@@ -302,9 +432,9 @@ const styles = StyleSheet.create({
     rightBlockUp: {
 
         borderBottomRightRadius: 0,
-        borderTopRightRadius: 15,
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginTop: 5,
@@ -323,9 +453,9 @@ const styles = StyleSheet.create({
     rightBlockMid: {
 
         borderBottomRightRadius: 0,
-        borderTopRightRadius: 15,
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
         flexDirection: 'row',
         alignItems: 'flex-end',
         alignSelf: 'flex-end',
@@ -341,9 +471,9 @@ const styles = StyleSheet.create({
     rightBlockDown: {
 
         borderBottomRightRadius: 0,
-        borderTopRightRadius: 15,
-        borderTopLeftRadius: 15,
-        borderBottomLeftRadius: 15,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginRight: 5,
@@ -360,7 +490,7 @@ const styles = StyleSheet.create({
     },
     rightBlockOnly: {
 
-        borderRadius: 15,
+        borderRadius: 10,
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginRight: 5,
@@ -381,9 +511,9 @@ const styles = StyleSheet.create({
     leftBlockUp: {
 
         borderBottomLeftRadius: 0,
-        borderTopLefttRadius: 15,
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15,
+        borderTopLefttRadius: 10,
+        borderTopRightRadius: 10,
+        bborderBottomRightRadius: 10,
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginLeft: 65,
@@ -400,9 +530,9 @@ const styles = StyleSheet.create({
     },
     leftBlockMid: {
         borderBottomLeftRadius: 0,
-        borderTopLefttRadius: 15,
-        borderTopRightRadius: 15,
-        borderBottomRightRadius: 15,
+        borderTopLefttRadius: 10,
+        borderTopRightRadius: 10,
+        bborderBottomRightRadius: 10,
         marginBottom: 5,
         marginLeft: 65,
         flexDirection: 'row',
@@ -419,9 +549,9 @@ const styles = StyleSheet.create({
     },
     leftBlockDown: {
 
-        borderBottomRightRadius: 15,
-        borderTopRightRadius: 15,
-        borderTopLeftRadius: 15,
+        bborderBottomRightRadius: 10,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
         borderBottomLeftRadius: 0,
 
         flexDirection: 'row',
@@ -441,7 +571,7 @@ const styles = StyleSheet.create({
     },
     leftBlockOnly: {
 
-        borderRadius: 15,
+        borderRadius: 10,
 
         flexDirection: 'row',
         alignItems: 'flex-end',
@@ -459,26 +589,6 @@ const styles = StyleSheet.create({
     },
 
 
-
-
-
-    rightBlock2: {
-
-        // borderRadius: sameN && sameP ? 15 : 0,
-        // borderBottomRightRadius: sameN ? 5 : 0,
-        // borderTopRightRadius: sameP ? 5 : 30,
-        // borderTopLeftRadius: sameP ? 5 : 30,
-        // borderBottomLeftRadius: sameN ? 5 : 30,
-
-        maxWidth: "60%",
-        backgroundColor: '#9C4AD5',
-        padding: 10,
-        shadowRadius: 2,
-        shadowOpacity: 0.5,
-        shadowOffset: {
-            height: 1,
-        },
-    },
     msgTxtRightStatus: {
         fontSize: 8,
 

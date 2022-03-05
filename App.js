@@ -23,14 +23,14 @@ export default class Chat extends Component {
     this.chatBatRef = React.createRef();
     this.state = {
       msg: '',
-      messages: [
+      messsages: [
 
         {
           "system": false,
           "status": 0,
           "_id": "620d612358c088297464e677",
           "from": "610182b837c05541b8f7c457",
-          "link": "https://www.youtube.com/embed/ZZ5LpwO-An4?rel=0&autoplay=0&showinfo=0&controls=0",
+          "link": "https://www.youtube.com/embed/oRC1K7uUBZ8",
           "conversationId": "6123e75a39a7ed3b3c2c325f",
           "text": "egergergeeruiyui",
           "type": 3,
@@ -144,18 +144,18 @@ export default class Chat extends Component {
           "__v": 0
         }
       ],
-      messsages: [],
+      messages: [],
 
     };
 
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 100; i++) {
       let m = Math.random() < 0.2 ? Math.random() < 0.1 ? 0 : 2 : 1;
-      this.state.messsages.push({
+      this.state.messages.push({
         _id: Math.floor(Math.random() * 100000000) + 1,
         from: Math.random() < 0.5 ? "6101b5c6b24b3971dfb70805" : "Mohamed",
         text: i, //m==0? this.sentence(2) : this.sentence(20),
-        type: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 2 : 1,
-        link: "https://picsum.photos/200/300?random=" + Math.floor(Math.random() * 10),
+        type: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 3 : 1,
+        link: "https://www.youtube.com/embed/oRC1K7uUBZ8",
         status: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 2 : 1,
         createdAt: new Date((new Date()) - Math.floor(Math.random() * 10000000000 + 1)).toISOString()
       })
