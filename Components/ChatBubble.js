@@ -220,12 +220,13 @@ export default class ChatBubble extends PureComponent {
                 <View key={this.props.item.key}>
                     {date && <Text style={{ fontSize: 12, color: "#808080", textAlign: "center" }}>{date}</Text>}
 
-                    <View style={pos ? null : [{ alignContent:"center",alignItems:"center", backgroundColor:"#fff", padding:10,borderRadius:10, width:"80%" ,marginLeft:65}]}>
+                    <View style={pos ? null : [{ flexDirection:"row", alignContent:"center", alignItems: 'flex-end', backgroundColor:"#fff", padding:10,borderRadius:10, width:"80%" ,marginLeft:65}]}>
+
                         {!sameN && !pos && this.renderAvatar()}
                         <View  style={{ }}>
-                            <View style={{ height: height / 3, width: width / 1.4 }}>
+                            <View style={{ height: height / 3, width: width / 1.5, }}>
                                 <View style={{ flex: 1, alignContent: "center", }}>
-                                    <WebView
+                                     <WebView
                                         style={{ backgroundColor: "#fff", flex: 1 }}
                                         renderLoading={() => {
                                             return this.displaySpinner();
@@ -234,7 +235,7 @@ export default class ChatBubble extends PureComponent {
                                         source={{
                                             uri: this.props.item.link
                                         }}
-                                    />
+                                    /> 
                                     <Text style={pos ? styles.timeRight : styles.timeLeft}>
                                         {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
                                         {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
@@ -245,70 +246,6 @@ export default class ChatBubble extends PureComponent {
                         </View>
 
                     </View>
-
-
-
-
-                    {/* {!this.state.playVid ?
-                        <TouchableOpacity onPress={() => { this.setState({ playVid: true }) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 65 } : null])}>
-                            <View>
-                                <Image source={{ uri: "https://img.youtube.com/vi/" + this.getYTId(this.props.item.link) + "/0.jpg" }} style={{ width: 200, height: 200, borderRadius: 5 }} />
-                                <Text style={pos ? styles.timeRight : styles.timeLeft}>
-                                    {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
-                                    {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
-                                </Text>
-                            </View>
-                        </TouchableOpacity> 
-                        :
-                        <View style={styles.modal}>
-                            <View style={styles.modalContainer}>
-                                <WebView
-                                    style={{ height: 400 }}
-                                    renderLoading={() => {
-                                        return this.displaySpinner();
-                                      }}
-                                    javaScriptEnabled={true}
-                                    source={{
-                                        uri: this.props.item.link
-                                    }}
-                                />
-                            </View>
-                        </View>} */}
-                    {/* <View key={this.props.item.key} style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
-                        {!sameN && !pos && this.renderAvatar()}
-                        <WebView
-                            style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, { height: 400, width: 400, backgroundColor: "#fff", padding: 20, marginLeft: 65, borderRadius: 5, flex: 1 }])}
-                            renderLoading={() => {
-                                return this.displaySpinner();
-                            }}
-                            javaScriptEnabled={true}
-                            source={{
-                                uri: this.props.item.link
-                            }}
-                        />
-                        <Text style={pos ? styles.timeRight : styles.timeLeft}>
-                            {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
-                            {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
-                        </Text>
-
-                    </View> */}
-
-
-
-
-
-
-
-
-
-                    {/* <TouchableOpacity onPress={() => { this.props.VideoView(this.props.item.link) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 65 } : null])}>
-                        <View>
-                            <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
-                            <Text style={pos ? styles.timeRight : styles.timeLeft}>
-                                {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
-                                {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
-                            </Text>
-                        </View>*/}
                 </View>
             )
         } else if (this.props.item.type === 0) { //type == server
@@ -316,7 +253,7 @@ export default class ChatBubble extends PureComponent {
                 <View key={this.props.item.key}>
                     <View style={styles.midMsg}>
                         <View style={styles.midBlock}>
-                            <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>{this.props.item.msg}</Text>
+                            <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>{this.props.item.text}</Text>
                             <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
                                 {!pos && this.props.item.status === 0 && "\n⏳"}
                                 {!pos && this.props.item.status === 1 && "\n✓"}

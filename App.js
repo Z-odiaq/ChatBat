@@ -148,7 +148,7 @@ export default class Chat extends Component {
 
     };
 
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 10; i++) {
       let m = Math.random() < 0.2 ? Math.random() < 0.1 ? 0 : 2 : 1;
       this.state.messages.push({
         _id: Math.floor(Math.random() * 100000000) + 1,
