@@ -5,10 +5,7 @@ import {
     View,
     TouchableOpacity,
     Image,
-    AppState,
-    Alert,
     Dimensions,
-    Modal,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 const { width, height } = Dimensions.get('window');
@@ -17,38 +14,21 @@ export default class ChatBubble extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            appState: AppState.currentState,
-            playVid: false,
 
         };
 
     }
 
-
     componentDidMount() {
-        AppState.addEventListener('change', this._handleAppStateChange);
-
-
     }
-
     componentWillUnmount() {
-        //AppState.removeEventListener('change', this._handleAppStateChange);
     }
-
-    _handleAppStateChange = (nextAppState) => {
-        this.setState({ appState: nextAppState });
-    }
-
-
-
 
     dateDifference(date2, date1) {
         const msPerDay = 1000 * 60 * 60 * 24;
-
         // Discard the time and time-zone information.
         const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
         const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
-
         return Math.floor(24 * ((utc2 - utc1) / msPerDay));
     }
 
@@ -59,19 +39,13 @@ export default class ChatBubble extends PureComponent {
 
     getDate(dateCurr) {
 
-
-
-
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const today = new Date();
-
         const dateP = new Date(this.props.prevItem.createdAt)
         const dateN = new Date(this.props.nextItem.createdAt)
 
         // console.log(dateCurr.getFullYear() + "-" + dateCurr.getMonth() + "-" + dateCurr.getDate() + " " + dateCurr.getHours() + ":" + dateCurr.getMinutes() + " " + pos);
-
-
 
         if (dateCurr.getHours() === today.getHours()) {
             return null
@@ -96,23 +70,9 @@ export default class ChatBubble extends PureComponent {
             //console.log(diff);
             return ((dateCurr.getHours() < 10 ? "0" + dateCurr.getHours() : dateCurr.getHours()) + ":" + (dateCurr.getMinutes() < 10 ? "0" + dateCurr.getMinutes() : dateCurr.getMinutes()))
         }
-
-
-
-
-
-
-
         return
     }
 
-    getWeek() {
-        return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
-    }
-
-    getTime() {
-        return <Image source={{ uri: this.props.friendAvatar }} style={[styles.avatarStyle, this.props.avatarStyle]} />
-    }
 
     getYTId(url) {
         var ID = '';
@@ -128,54 +88,16 @@ export default class ChatBubble extends PureComponent {
         return ID;
     }
 
-    displaySpinner() {
-        return (
-            <View style={{ flex: 1 }}>
-                <Spinner color="blue" />
-            </View>
-        );
-    }
-
-    displayError() {
-        Alert.alert(
-            "no_internet",
-            "require_internet_connection",
-            [
-                { text: 'OK', onPress: () => this.props.navigation.goBack() },
-            ],
-            { cancelable: false });
-    }
-
-    videoRender = () => {
-        return (
-            <Modal visible={this.state.playVid} onRequestClose={this.setState({ playVid: false })}>
-                <View style={styles.modal}>
-                    <View style={styles.modalContainer}>
-                        <WebView
-                            style={{ height: 400 }}
-                            javaScriptEnabled={true}
-                            source={{
-                                uri: this.props.item.link
-                            }}
-                        />
-                    </View>
-                </View>
-            </Modal>
-        )
-
-    }
 
     renderByType = () => {
         const pos = this.props.item.from === this.props.userId;
         // console.log(this.props.item.from === this.props.userId)
         const status = !pos && this.props.item.status === !pos && this.props.item.status;
-
+        console.log(this.props.item.type);
         const sameN = this.props.item.from === this.props.nextItem.from;
         const sameP = this.props.item.from === this.props.prevItem.from;
         const dateCurr = new Date(this.props.item.createdAt)
-
         const date = this.getDate(dateCurr);
-
 
         if (this.props.item.type === 1) {//type = text
             return (
@@ -190,7 +112,7 @@ export default class ChatBubble extends PureComponent {
                             <View>
                                 <Text style={pos ? styles.msgTxtRight : styles.msgTxtLeft}>{this.props.item.text}</Text>
                                 <Text style={pos ? styles.timeRight : styles.timeLeft}>
-                                    {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
+                                    {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "🕒" : this.props.item.status === 1 ? "✓" : "✓✓" : null}
                                     {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
                                 </Text>
                             </View>
@@ -207,7 +129,7 @@ export default class ChatBubble extends PureComponent {
                         <View>
                             <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
                             <Text style={pos ? styles.timeRight : styles.timeLeft}>
-                                {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
+                                {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "🕒" : this.props.item.status === 1 ? "✓" : "✓✓" : null}
                                 {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
                             </Text>
                         </View>
@@ -219,30 +141,31 @@ export default class ChatBubble extends PureComponent {
 
                 <View key={this.props.item.key}>
                     {date && <Text style={{ fontSize: 12, color: "#808080", textAlign: "center" }}>{date}</Text>}
+                    <Text>haha</Text>
 
-                    <View style={pos ? null : [{ flexDirection:"row", alignContent:"center", alignItems: 'flex-end', backgroundColor:"#fff", padding:10,borderRadius:10, width:"80%" ,marginLeft:65}]}>
+                    <View style={pos ? null : [{ flexDirection: "row", alignContent: "center", }]}>
 
-                        {!sameN && !pos && this.renderAvatar()}
-                        <View  style={{ }}>
-                            <View style={{ height: height / 3, width: width / 1.5, }}>
-                                <View style={{ flex: 1, alignContent: "center", }}>
-                                     <WebView
-                                        style={{ backgroundColor: "#fff", flex: 1 }}
-                                        renderLoading={() => {
-                                            return this.displaySpinner();
-                                        }}
-                                        javaScriptEnabled={true}
-                                        source={{
-                                            uri: this.props.item.link
-                                        }}
-                                    /> 
-                                    <Text style={pos ? styles.timeRight : styles.timeLeft}>
-                                        {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "\n🕒" : this.props.item.status === 1 ? "\n✓" : "\n✓✓" : null}
-                                        {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
-                                    </Text>
-                                </View>
-
+                        {!pos && this.renderAvatar()}
+                        <View style={{ backgroundColor: "" }}>
+                            <View style={!pos ?
+                                { flex: 1, backgroundColor: "#fff", padding: 10, borderRadius: 10, } :
+                                { flex: 1, margin: 5, alignSelf: "flex-end", backgroundColor: '#9C4AD5', padding: 10, borderRadius: 10, }}>
+                                <WebView
+                                    style={{ flex: 1, height: height / 3, width: width / 1.5, }}
+                                    renderLoading={() => {
+                                        return this.displaySpinner();
+                                    }}
+                                    javaScriptEnabled={true}
+                                    source={{
+                                        uri: this.props.item.link
+                                    }}
+                                />
+                                <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                                    {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "🕒" : this.props.item.status === 1 ? "✓" : "✓✓" : null}
+                                    {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                                </Text>
                             </View>
+
                         </View>
 
                     </View>
@@ -255,9 +178,9 @@ export default class ChatBubble extends PureComponent {
                         <View style={styles.midBlock}>
                             <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>{this.props.item.text}</Text>
                             <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
-                                {!pos && this.props.item.status === 0 && "\n⏳"}
-                                {!pos && this.props.item.status === 1 && "\n✓"}
-                                {!pos && this.props.item.status === 2 && "\n✓✓"}
+                                {!pos && this.props.item.status === 0 && "⏳"}
+                                {!pos && this.props.item.status === 1 && "✓"}
+                                {!pos && this.props.item.status === 2 && "✓✓"}
                             </Text>
                         </View>
                     </View>
@@ -325,6 +248,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
+        alignSelf:"flex-end"
     },
     midBlock: {
         justifyContent: 'center',
@@ -561,7 +485,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         marginBottom: -8,
         marginRight: -4,
-        marginTop: 2,
+        marginTop: -2,
         textAlign: "right",
         fontWeight: '600',
     },
