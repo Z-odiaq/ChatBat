@@ -155,7 +155,7 @@ export default class Chat extends Component {
         from: Math.random() < 0.5 ? "6101b5c6b24b3971dfb70805" : "Mohamed",
         text: i, //m==0? this.sentence(2) : this.sentence(20),
         type: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 3 : 1,
-        link: "https://www.youtube.com/embed/oRC1K7uUBZ8",
+        link: "https://www.youtube.com/watch?v=oRC1K7uUBZ8",
         status: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 2 : 1,
         createdAt: new Date((new Date()) - Math.floor(Math.random() * 10000000000 + 1)).toISOString()
       })

@@ -157,7 +157,7 @@ export default class ChatBubble extends PureComponent {
                                     }}
                                     javaScriptEnabled={true}
                                     source={{
-                                        uri: this.props.item.link
+                                        uri: "https://www.youtube.com/embed/"+this.getYTId(this.props.item.link)
                                     }}
                                 />
                                 <Text style={pos ? styles.timeRight : styles.timeLeft}>
