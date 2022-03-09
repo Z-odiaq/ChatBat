@@ -17,7 +17,6 @@ import ChatBat from './Components/ChatBat';
 
 const { width, height } = Dimensions.get('window');
 export default class Chat extends Component {
-
   constructor(props) {
     super(props);
     this.chatBatRef = React.createRef();
@@ -147,15 +146,17 @@ export default class Chat extends Component {
       messages: [],
 
     };
-
-    for (var i = 0; i < 10; i++) {
-      let m = Math.random() < 0.2 ? Math.random() < 0.1 ? 0 : 2 : 1;
+    let links = ["youtube.com", "www.blogger.com", "www.google.com", "microsoft.com	", "support.google.com"];
+    let vids = ["oRC1K7uUBZ8", "TWJVgTeNljs", "66VnOdk6oto", "3YxaaGgTQYM", "DMAaLIIRB38", "EZzbh9YjVhQ"];
+    for (var i = 0; i < 100; i++) {
+      let m = Math.random() < 0.2 ? Math.random() < 0.4 ? Math.random() < 0.6 ? Math.random() < 0.8 ? 4 : 0 : 3 : 1 : 2
       this.state.messages.push({
         _id: Math.floor(Math.random() * 100000000) + 1,
         from: Math.random() < 0.5 ? "6101b5c6b24b3971dfb70805" : "Mohamed",
-        text: i, //m==0? this.sentence(2) : this.sentence(20),
-        type: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 3 : 1,
-        link: "https://www.youtube.com/watch?v=oRC1K7uUBZ8",
+        text: m == 0 ? this.sentence(2) : m == 4 ? links[Math.floor(Math.random() * 4)] : m == 1 ? this.sentence(10) : m == 3 ? "https://www.youtube.com/watch?v="+vids[Math.floor(Math.random() * 5)] : null,
+
+        type: m,
+        link: "https://picsum.photos/200/300?random=" + vids[Math.floor(Math.random() * 10)],
         status: Math.random() < 0.3 ? Math.random() < 0.5 ? 0 : 2 : 1,
         createdAt: new Date((new Date()) - Math.floor(Math.random() * 10000000000 + 1)).toISOString()
       })
