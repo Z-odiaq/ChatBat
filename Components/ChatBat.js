@@ -15,19 +15,32 @@ export default class ChatBat extends Component {
     };
   }
 
+  isUrl(str) {
+    const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+    console.log(!!pattern.test(str));
+    return !!pattern.test(str);
+
+
+  }
+
 
   send(text) {
     console.log(text);
     if (text.length > 0) {
       var messages = this.props.messages;
       var msg = {
-        id: Math.floor(Math.random() * 100000000) ,
+        id: Math.floor(Math.random() * 100000000),
         from: this.props.userId,
         text: text,
-        type: 1,
+        type: this.isUrl(text) ? 4 : 1,
         status: 2,
         key: new Date().toISOString(),
-        createdAt:  new Date().toISOString().toString(),
+        createdAt: new Date().toISOString().toString(),
         image: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'
       }
       messages.unshift(msg)
@@ -42,7 +55,7 @@ export default class ChatBat extends Component {
     //console.log(index + 1 + " " + JSON.stringify(item));
     return (<View style={{ scaleY: -1 }}>
       <ChatBubble
-        userId={ this.props.userId}
+        userId={this.props.userId}
         item={item}
         index={index}
         key={item._id}
@@ -64,9 +77,9 @@ export default class ChatBat extends Component {
           data={this.props.messages}
           inverted={false}
           onEndReached={this.onEndReached}
-         // ref={(ref) => { this.flatListRef = ref; }}
+          // ref={(ref) => { this.flatListRef = ref; }}
           onEndReachedThreshold={0.1}
-         // onEndReached={this.onEndReached}
+          // onEndReached={this.onEndReached}
           ListEmptyComponent={this.renderChatEmpty}
           scrollEventThrottle={50}
           keyExtractor={(item) => { return item._id }}
