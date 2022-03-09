@@ -5,6 +5,7 @@ import {
     View,
     TouchableOpacity,
     Image,
+    Linking,
     Dimensions,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
@@ -157,12 +158,12 @@ export default class ChatBubble extends PureComponent {
                                     }}
                                     javaScriptEnabled={true}
                                     source={{
-                                        uri: "https://www.youtube.com/embed/"+this.getYTId(this.props.item.link)
+                                        uri: "https://www.youtube.com/embed/"+this.getYTId(this.props.item.text)
                                     }}
                                 />
                                 <Text style={pos ? styles.timeRight : styles.timeLeft}>
                                     {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "🕒" : this.props.item.status === 1 ? "✓" : "✓✓" : null}
-                                    {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                                    {this.getYTId(this.props.item.text)+"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
                                 </Text>
                             </View>
 
@@ -171,7 +172,31 @@ export default class ChatBubble extends PureComponent {
                     </View>
                 </View>
             )
-        } else if (this.props.item.type === 0) { //type == server
+        } else if(this.props.item.type === 4){
+            return (
+                <View key={this.props.item.key}>
+                    {date && <Text style={{ fontSize: 12, color: "#808080", textAlign: "center" }}>{date}</Text>}
+
+                    <View style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
+                        {!sameN && !pos && this.renderAvatar()}
+                        <View onPress={() => { textshow = !textshow; console.log(textshow) }} style={pos ?
+                            (sameN ? sameP ? styles.rightBlockMid : styles.rightBlockUp : sameP ? styles.rightBlockDown : styles.rightBlockOnly) :
+                            (sameN ? sameP ? styles.leftBlockMid : styles.leftBlockUp : sameP ? styles.leftBlockDown : styles.leftBlockOnly)}>
+                            <View>
+                                <Text onPress={() => Linking.openURL(this.props.item.text)} 
+                                style={styles.msgLinkLeft}>{this.props.item.text}</Text>
+                                <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                                    {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "🕒" : this.props.item.status === 1 ? "✓" : "✓✓" : null}
+                                    {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                                </Text>
+                            </View>
+                        </View>
+
+                    </View>
+                </View>
+            )
+        }
+         else if (this.props.item.type === 0) { //type == server
             return (
                 <View key={this.props.item.key}>
                     <View style={styles.midMsg}>
@@ -469,6 +494,12 @@ const styles = StyleSheet.create({
     msgTxtLeft: {
         fontSize: 16,
         color: '#9A979F',
+        fontWeight: '600',
+    },
+    msgLinkLeft: {
+        fontSize: 16,
+        color:"#00BFFF",
+        textDecorationLine:"underline",
         fontWeight: '600',
     },
     timeLeft: {

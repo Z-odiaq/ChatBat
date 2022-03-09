@@ -28,7 +28,6 @@ export default class Input extends Component {
                         placeholderTextColor="#696969"
                         onChangeText={text => this.setState({ text })}
                         blurOnSubmit={false}
-                        onSubmitEditing={() => this.send()}
                         placeholder="Type a message"
                         returnKeyType="send" />
                     <TouchableOpacity
