@@ -126,10 +126,10 @@ export default class ChatBubble extends PureComponent {
             return (
                 <View key={this.props.item.key} style={pos ? null : [{ flexDirection: "row", alignItems: 'flex-end' }]}>
                     {!sameN && !pos && this.renderAvatar()}
-                    <TouchableOpacity onPress={() => { this.props.imageView(this.props.item.link) }} style={pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 65 } : null])}>
+                    <TouchableOpacity onPress={() => { this.props.imageView(this.props.item.link) }} style={[pos ? styles.rightBlockOnly : ([styles.leftBlockOnly, sameN ? { marginLeft: 50 } : null]),{backgroundColor:null}]}>
                         <View>
                             <Image source={{ uri: this.props.item.link }} style={{ width: 200, height: 200, borderRadius: 5 }} />
-                            <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                            <Text style={pos ? [styles.timeRight, {color:'#9A979F'}] : styles.timeLeft}>
                                 {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "🕒" : this.props.item.status === 1 ? "✓" : "✓✓" : null}
                                 {"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
                             </Text>
@@ -149,8 +149,8 @@ export default class ChatBubble extends PureComponent {
                         {!pos && this.renderAvatar()}
                         <View style={{ backgroundColor: "" }}>
                             <View style={!pos ?
-                                { flex: 1, backgroundColor: "#fff", padding: 10, borderRadius: 10, } :
-                                { flex: 1, margin: 5, alignSelf: "flex-end", backgroundColor: '#9C4AD5', padding: 10, borderRadius: 10, }}>
+                                { flex: 1, padding: 10} :
+                                { flex: 1, margin: 5, alignSelf: "flex-end", padding: 10 }}>
                                 <WebView
                                     style={{ flex: 1, height: height / 3, width: width / 1.5, }}
                                     renderLoading={() => {
@@ -161,9 +161,9 @@ export default class ChatBubble extends PureComponent {
                                         uri: "https://www.youtube.com/embed/"+this.getYTId(this.props.item.text)
                                     }}
                                 />
-                                <Text style={pos ? styles.timeRight : styles.timeLeft}>
+                                <Text style={pos ? [styles.timeRight, {color:'#9A979F'}]: styles.timeLeft}>
                                     {(!this.props.nextItem.from && pos) ? this.props.item.status === 0 ? "🕒" : this.props.item.status === 1 ? "✓" : "✓✓" : null}
-                                    {this.getYTId(this.props.item.text)+"  " + dateCurr.getHours() + ":" + dateCurr.getMinutes()}
+                                    { dateCurr.getHours() + ":" + dateCurr.getMinutes()}
                                 </Text>
                             </View>
 
@@ -172,7 +172,7 @@ export default class ChatBubble extends PureComponent {
                     </View>
                 </View>
             )
-        } else if(this.props.item.type === 4){
+        } else if(this.props.item.type === 4){ //link
             return (
                 <View key={this.props.item.key}>
                     {date && <Text style={{ fontSize: 12, color: "#808080", textAlign: "center" }}>{date}</Text>}
@@ -199,16 +199,9 @@ export default class ChatBubble extends PureComponent {
          else if (this.props.item.type === 0) { //type == server
             return (
                 <View key={this.props.item.key}>
-                    <View style={styles.midMsg}>
                         <View style={styles.midBlock}>
                             <Text style={{ fontSize: 14, color: "#808080", textAlign: "center" }}>{this.props.item.text}</Text>
-                            <Text style={pos ? styles.msgTxtRightStatus : styles.msgTxtLeftStatus}>
-                                {!pos && this.props.item.status === 0 && "⏳"}
-                                {!pos && this.props.item.status === 1 && "✓"}
-                                {!pos && this.props.item.status === 2 && "✓✓"}
-                            </Text>
                         </View>
-                    </View>
                 </View>)
         }
     }
@@ -229,10 +222,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     ImageRightBlock: {
-        borderBottomRightRadius: 0,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10,
+        borderRadius: 10,
+
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginTop: 5,
@@ -249,17 +240,14 @@ const styles = StyleSheet.create({
     },
     ImageLeftBlock: {
 
-        borderBottomLeftRadius: 0,
-        borderTopLefttRadius: 10,
-        borderTopRightRadius: 10,
-        bborderBottomRightRadius: 10,
+        borderRadius: 10,
+
         marginTop: 5,
         marginRight: 5,
         marginBottom: 5,
-        marginLeft: 65,
+        marginLeft: 50,
         flexDirection: 'row',
         alignItems: 'flex-end',
-        borderRadius: 5,
         backgroundColor: '#fff',
         padding: 10,
         shadowRadius: 2,
@@ -269,7 +257,7 @@ const styles = StyleSheet.create({
         },
     },
     avatarStyle: {
-        margin: 10,
+        margin: 4,
         width: 40,
         height: 40,
         borderRadius: 20,
@@ -278,11 +266,12 @@ const styles = StyleSheet.create({
     midBlock: {
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'center',
         padding: 10,
         marginTop: 5,
         marginBottom: 5,
         maxWidth: "75%",
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#fff',
         borderRadius: 5,
 
     },
@@ -295,37 +284,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
     },
-    msgBlock: {
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        margin: 5,
-        maxWidth: "70%",
-        borderRadius: 5,
-        backgroundColor: '#fff',
-        padding: 10,
-        shadowRadius: 2,
-        shadowOpacity: 0.5,
-        shadowOffset: {
-            height: 1,
-        },
-    },
-    rightMsg: {
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        margin: 5,
-        alignSelf: 'flex-end',
-    },
-    rightBlockUp: {
+ghtBlockUp: {
 
-        borderBottomRightRadius: 0,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10,
+        borderRadius: 10,
+
         flexDirection: 'row',
         alignItems: 'flex-end',
-        marginTop: 5,
         marginRight: 5,
-        marginBottom: 5,
+        marginBottom: 2,
         alignSelf: 'flex-end',
         maxWidth: "70%",
         backgroundColor: '#9C4AD5',
@@ -337,17 +303,14 @@ const styles = StyleSheet.create({
         },
     },
     rightBlockMid: {
+        borderRadius: 10,
 
-        borderBottomRightRadius: 0,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10,
         flexDirection: 'row',
         alignItems: 'flex-end',
         alignSelf: 'flex-end',
         maxWidth: "70%",
         marginRight: 5,
-        marginBottom: 5,
+        marginBottom: 2,
         backgroundColor: '#9C4AD5',
         padding: 10,
         shadowRadius: 2,
@@ -356,14 +319,12 @@ const styles = StyleSheet.create({
     },
     rightBlockDown: {
 
-        borderBottomRightRadius: 0,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10,
+        borderRadius: 10,
+
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginRight: 5,
-        marginBottom: 5,
+        marginBottom: 2,
         alignSelf: 'flex-end',
         maxWidth: "70%",
         backgroundColor: '#9C4AD5',
@@ -380,8 +341,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         marginRight: 5,
-        marginBottom: 5,
-        marginTop: 5,
         alignSelf: 'flex-end',
         maxWidth: "70%",
         backgroundColor: '#9C4AD5',
@@ -396,15 +355,12 @@ const styles = StyleSheet.create({
 
     leftBlockUp: {
 
-        borderBottomLeftRadius: 0,
-        borderTopLefttRadius: 10,
-        borderTopRightRadius: 10,
-        bborderBottomRightRadius: 10,
+
+        borderRadius: 10,
         flexDirection: 'row',
         alignItems: 'flex-end',
-        marginLeft: 65,
-        marginTop: 5,
-        marginBottom: 5,
+        marginLeft: 50,
+        marginBottom: 2,
         maxWidth: "60%",
         backgroundColor: '#fff',
         padding: 10,
@@ -415,16 +371,14 @@ const styles = StyleSheet.create({
         },
     },
     leftBlockMid: {
-        borderBottomLeftRadius: 0,
-        borderTopLefttRadius: 10,
-        borderTopRightRadius: 10,
-        bborderBottomRightRadius: 10,
-        marginBottom: 5,
-        marginLeft: 65,
+
+        
+        marginBottom: 2,
+        marginLeft: 50,
         flexDirection: 'row',
         alignItems: 'flex-end',
         maxWidth: "60%",
-        borderRadius: 15,
+        borderRadius: 10,
         backgroundColor: '#fff',
         padding: 10,
         shadowRadius: 2,
@@ -435,18 +389,13 @@ const styles = StyleSheet.create({
     },
     leftBlockDown: {
 
-        bborderBottomRightRadius: 10,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 0,
-
         flexDirection: 'row',
         alignItems: 'flex-end',
-        marginLeft: 5,
+        marginLeft: 2,
         marginBottom: 10,
 
         maxWidth: "60%",
-        borderRadius: 15,
+        borderRadius: 10,
         backgroundColor: '#fff',
         padding: 10,
         shadowRadius: 2,
@@ -461,9 +410,7 @@ const styles = StyleSheet.create({
 
         flexDirection: 'row',
         alignItems: 'flex-end',
-        marginLeft: 5,
-        marginBottom: 5,
-        marginTop: 5,
+        marginLeft: 2,
         maxWidth: "60%",
         backgroundColor: '#fff',
         padding: 10,
@@ -478,7 +425,7 @@ const styles = StyleSheet.create({
     msgTxtRightStatus: {
         fontSize: 8,
 
-        marginBottom: 8,
+        marginBottom: 1,
         color: '#1DA1F2',
         fontWeight: '600',
         position: "absolute",
