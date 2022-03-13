@@ -1,5 +1,5 @@
 # ChatBat
-Fast, light, minimized, complete and performant UI for React Native
+Fast, light, minimized, complete and performant Chat UI for React Native
 
 # Inspiration:
 Defiantly the horrible performance of the mainstream libraries. 
