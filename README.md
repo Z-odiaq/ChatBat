@@ -32,7 +32,10 @@ ChatBat is focused on delivering bloat-free, minimum yet complete chat UI experi
         image: ,//in case "type: 2", link for the image is needed
       }
 # Screenshots:
-![ScreenShot_20220312211932](https://user-images.githubusercontent.com/17526102/158036589-19dffbdf-a5ae-476d-9c0c-9c0ce1fed7c2.png) ![ScreenShot_20220312212000](https://user-images.githubusercontent.com/17526102/158036595-154476ee-a384-471f-88ab-ce63b9650a3a.png) ![ScreenShot_20220312212101](https://user-images.githubusercontent.com/17526102/158036604-91c29a9a-d1b5-4037-b15d-666b9b1b43b2.png)
+![image](https://user-images.githubusercontent.com/17526102/158057820-9ba40d8e-cdf9-4d4e-a3dc-b1eaea59c3d0.png)
+
+
+
 
 
 
